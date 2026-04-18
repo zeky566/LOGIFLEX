@@ -1,0 +1,165 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#000000;
+}
+
+/* ================= REGISTER FORM ================= */
+
+.register-form{
+    width:400px;
+    margin:auto;
+    padding:40px;
+    text-align:center;
+
+    background:rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+
+    border-radius:15px;
+    border:2px solid #004D61;
+
+    box-shadow:
+        0 0 10px #004D61,
+        0 0 30px #00eaff,
+        inset 0 0 10px #00eaff;
+}
+
+/* TITULO */
+
+.register-form h1{
+    color:white;
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+/* LABELS */
+
+.label,
+.rol-lab{
+    color:white;
+    font-size:14px;
+}
+
+/* INPUTS */
+
+.register-form input[type="text"],
+.register-form input[type="tel"],
+.register-form input[type="password"]{
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+
+    background:transparent;
+    border:2px solid #00eaff;
+    border-radius:25px;
+
+    color:white;
+    outline:none;
+
+    transition:0.3s;
+    
+}
+
+.register-form input::placeholder{
+    color:#727171;
+}
+
+.register-form input:focus{
+    box-shadow:0 0 10px #00eaff;
+}
+
+/* ================= BOTONES ================= */
+
+.btn-save,
+.btn-cancel{
+    width:100%;
+    padding:12px;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    margin-top:25px;
+    border-radius:25px;
+    
+   
+    
+    
+}
+
+/* BOTON GUARDAR */
+
+.btn-save{
+    background:linear-gradient(90deg,#004D61,#0088ff);
+    box-shadow:0 0 10px #00eaff;
+}
+
+.btn-save:hover{
+    box-shadow:
+        0 0 10px #004D61,
+        0 0 30px #00eaff;
+}
+
+/* BOTON CANCELAR */
+
+.btn-cancel{
+       margin-top:25px;
+    background:linear-gradient(90deg,#ff4b4b,#ff0000);
+}
+
+.btn-cancel:hover{
+    box-shadow:
+        0 0 10px #ff4b4b,
+        0 0 20px #ff0000;
+}
+
+/* ================= SELECT ================= */
+
+.select-css{
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+
+    background:transparent;
+    border:2px solid #00eaff;
+    border-radius:25px;
+
+    color:white;
+    outline:none;
+}
+
+.select-css option{
+    color:black;
+}
+
+.img1{
+    display: grid;
+   
+    
+    max-width: 750px;
+    
+  
+    border-radius: 10px;
+
+    box-shadow:
+        0 0 10px #004D61,
+        0 0 30px #00eaff,
+        inset 0 0 10px #00eaff;
+}
+
+.container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:60px;
+}
+
+

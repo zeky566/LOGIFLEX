@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <link rel="stylesheet" href="/resources/css/cliente.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Panel de Cliente</title>
+</head>
+
+<body>
+
+    <header class="hed-1">
+        
+        <img src="/resources/log1.png" alt="LOGIFLEX Logo" class="logo">
+
+        
+        <div class="cliente-top-welcome">
+            <span class="cliente-top-message">¡Bienvenido, Cliente! <strong>
+                    
+                            <%= name %>
+                        </strong></span>
+                        
+
+            <a href="/logout" class="btn-logout btn-logout-top">Cerrar sesión</a>
+        </div>
+
+    </header>
+
+    <!-- Hero Section con Slider CORREGIDO -->
+    <section class="hero" id="hero">
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+            <h1>Bienvenidos</h1>
+            <p>LOGIFLEX <br> Dedicada a brindar servicios de transporte y logística confiables y eficientes</p>
+        </div>
+
+        <!-- Controles del slider   (< flechas>)-->
+        <div class="slider-controls">
+            <span class="prev" id="prevBtn">&#10094;</span>
+            <span class="next" id="nextBtn">&#10095;</span>
+        </div>
+    </section>
+
+    <!-- SCRIPT CORREGIDO para el slider -->
+    <script>
+        // Esperar a que el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            const hero = document.querySelector(".hero");
+            const dots = document.querySelectorAll(".dot");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+
+            // CORREGIDO: Rutas correctas para las imágenes
+            // IMPORTANTE: Asegúrate de que estas imágenes existan en tu carpeta public/
+            const images = [
+                "/resources/c5.jpg",
+                "/resources/c6.jpg",
+                "/resources/c4.jpg"
+            ];
+
+            let current = 0;
+            let intervalId;
+
+            // Función para mostrar la imagen actual
+            function mostrarImagen(index) {
+                current = index;
+                hero.style.backgroundImage = `url('${images[current]}')`;
+
+                // Actualizar dots
+                dots.forEach((dot, i) => {
+                    if (i === current) {
+                        dot.classList.add("active");
+                    } else {
+                        dot.classList.remove("active");
+                    }
+                });
+            }
+
+            // Avanzar a la siguiente imagen
+            function siguienteImagen() {
+                current = (current + 1) % images.length;
+                mostrarImagen(current);
+            }
+
+            // Retroceder a la imagen anterior
+            function anteriorImagen() {
+                current = (current - 1 + images.length) % images.length;
+                mostrarImagen(current);
+            }
+
+            // Ir a una imagen específica (por los dots)
+            function irAImagen(index) {
+                mostrarImagen(index);
+                reiniciarIntervalo();
+            }
+
+            // Reiniciar el intervalo de cambio automático
+            function reiniciarIntervalo() {
+                clearInterval(intervalId);
+                intervalId = setInterval(siguienteImagen, 5000);
+            }
+
+            // Verificar que los elementos existen antes de agregar eventos
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener("click", function () {
+                    siguienteImagen();
+                    reiniciarIntervalo();
+                });
+
+                prevBtn.addEventListener("click", function () {
+                    anteriorImagen();
+                    reiniciarIntervalo();
+                });
+            }
+
+            // Event listeners para los dots
+            if (dots.length > 0) {
+                dots.forEach((dot, index) => {
+                    dot.addEventListener("click", () => irAImagen(index));
+                });
+            }
+
+            // Pausar al hacer hover
+            if (hero) {
+                hero.addEventListener("mouseenter", () => {
+                    clearInterval(intervalId);
+                });
+
+                hero.addEventListener("mouseleave", () => {
+                    intervalId = setInterval(siguienteImagen, 5000);
+                });
+            }
+
+            // Inicializar - mostrar primera imagen
+            if (images.length > 0) {
+                mostrarImagen(0);
+                intervalId = setInterval(siguienteImagen, 5000);
+            }
+        });
+    </script>
+
+ 
+
+
+    <div class="cliente-container">
+
+        <header class="cliente-header">
+
+            <div>
+
+                <h1 >Cliente</h1>
+                <br>
+
+                <p style="font-size: 23px;">Bienvenido : <strong>
+                        <%= name %>
+                    </strong></p>
+                    <br>
+
+               
+                
+
+            </div>
+             <img src="/resources/log1.png" alt="LOGIFLEX Logo" class="logo">
+
+        </header>
+
+        <% if (feedbackMessage) { %>
+            <div class="feedback-message <%= feedbackType === 'success' ? 'success' : 'error' %>">
+                <%= feedbackMessage %>
+            </div>
+        <% } %>
+
+        <button type="button" id="cliente-sidebar-mobile-toggle" class="cliente-sidebar-mobile-toggle" aria-expanded="false" aria-controls="cliente-sidebar-nav">
+            Menú dashboard
+        </button>
+
+        <div class="cliente-dashboard-layout">
+            <aside id="cliente-sidebar-nav" class="cliente-sidebar" aria-label="Menú de navegación del cliente">
+                <h3 class="cliente-sidebar-title">Inicio</h3>
+
+                <button type="button" class="cliente-menu-toggle" data-menu-target="menu-envios">Envíos</button>
+                <div id="menu-envios" class="cliente-submenu is-open">
+                    <a href="#cliente-resumen" data-panel-target="cliente-resumen" class="is-active-link">Resumen</a>
+                    <a href="#cliente-solicitud-envio" data-panel-target="cliente-solicitud-envio">Mis envíos</a>
+                    <a href="#cliente-seguimiento-mapa" data-panel-target="cliente-seguimiento-mapa">Seguimiento en mapa</a>
+                    <a href="#cliente-nuevo-envio" data-panel-target="cliente-nuevo-envio">Solicitar nuevo envío</a>
+                </div>
+
+                <button type="button" class="cliente-menu-toggle" data-menu-target="menu-chofer">Chofer</button>
+                <div id="menu-chofer" class="cliente-submenu">
+                    <a href="#cliente-calificar-chofer" data-panel-target="cliente-calificar-chofer">Calificar chofer</a>
+                    <a href="#cliente-historial-calificaciones" data-panel-target="cliente-historial-calificaciones">Historial de calificaciones</a>
+                </div>
+
+                <button type="button" class="cliente-menu-toggle" data-menu-target="menu-info">Información</button>
+                <div id="menu-info" class="cliente-submenu">
+                    <a href="#cliente-bienvenida" data-panel-target="cliente-bienvenida">Bienvenida</a>
+                </div>
+            </aside>
+
+            <div class="cliente-dashboard-main">
+
+
+        <!-- TARJETAS -->
+        <div class="summary-cards cliente-panel is-active-panel" id="cliente-resumen">
+
+            <div class="card">
+                <h3>Envíos solicitados</h3>
+                <p class="card-number"><%= stats && stats.total ? stats.total : 0 %></p>
+            </div>
+
+            <div class="card">
+                <h3>En tránsito</h3>
+                <p class="card-number"><%= stats && stats.inTransit ? stats.inTransit : 0 %></p>
+            </div>
+
+            <div class="card">
+                <h3>Entregados</h3>
+                <p class="card-number"><%= stats && stats.delivered ? stats.delivered : 0 %></p>
+            </div>
+
+        </div>
+
+
+        <!-- TABLA DE ENVIOS -->
+        <div class="section cliente-panel" id="cliente-solicitud-envio">
+
+            <h2 style="color: aliceblue;">Mis Envíos</h2>
+
+            <table class="viajes-table">
+
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Estado</th>
+                        <th>Chofer</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% if (Array.isArray(clientTrips) && clientTrips.length > 0) { %>
+                        <% clientTrips.slice(0, 20).forEach(function(viaje) { 
+                            const estado = String(viaje.estado_viaje || '').toLowerCase();
+                            const cssEstado = estado === 'entregado' ? 'entregado' : ((estado === 'en ruta' || estado === 'en carga') ? 'enruta' : 'pendiente');
+                            const fechaBase = viaje.fecha_salida || viaje.created_at;
+                            const fechaObj = fechaBase ? new Date(fechaBase) : null;
+                            const fechaVista = fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-MX') : '-';
+                        %>
+                            <tr data-trip-id="<%= viaje.trip_id || '' %>">
+                                <td><%= fechaVista %></td>
+                                <td><%= viaje.origen || '-' %></td>
+                                <td><%= viaje.destino || '-' %></td>
+                                <td><span class="badge <%= cssEstado %>"><%= viaje.estado_viaje || 'programado' %></span></td>
+                                <td><%= viaje.conductor || '-' %></td>
+                                <td>
+                                    <button type="button" class="trip-edit-btn" data-edit-trip-id="<%= viaje.trip_id || '' %>">Editar</button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6">Aún no tienes envíos registrados.</td>
+                        </tr>
+                    <% } %>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="section cliente-panel" id="cliente-seguimiento-mapa">
+
+            <h2 style="color: aliceblue;">Seguimiento de envío en mapa</h2>
+            <p class="helper-line">Selecciona un viaje para visualizar origen, destino, paradas y ubicación actual.</p>
+
+            <div class="request-grid">
+                <select id="client-trip-selector" class="form-control full">
+                    <option value="">Selecciona un envío</option>
+                </select>
+            </div>
+
+            <div id="client-trip-map" aria-label="Mapa de seguimiento del cliente"></div>
+            <p id="client-map-status" class="client-map-status">Selecciona un envío para ver su ubicación.</p>
+
+        </div>
+
+
+        <!-- SOLICITAR ENVIO -->
+        <div class="section cliente-panel" id="cliente-nuevo-envio">
+
+            <h2 id="client-request-title" style="color: aliceblue;">Solicitar nuevo envío</h2>
+
+            <form id="client-request-form" action="/solicitar-envio" method="POST">
+
+                <input type="hidden" name="trip_id" id="editing-trip-id" value="">
+
+                <h4 class="form-subtitle">Datos obligatorios</h4>
+                <p class="helper-line">Con estos datos administración puede crear y asignar el viaje.</p>
+
+                <div class="request-grid">
+
+                    <input type="text" name="origen" placeholder="Lugar de origen" class="form-control" required>
+
+                    <input type="text" name="destino" placeholder="Lugar de destino" class="form-control" required>
+
+                    <input type="text" name="tipo_mercancia" placeholder="Tipo de mercancía" class="form-control" required>
+
+                    <input type="number" name="valor_mercancia" placeholder="Valor de mercancía" class="form-control" step="0.01" min="0">
+
+                    <input type="text" name="cliente" value="<%= name %>" placeholder="Cliente" class="form-control" required>
+
+                    <input type="tel" name="telefono_cliente" placeholder="Número del cliente" class="form-control" inputmode="numeric" pattern="[0-9+\-() ]{7,20}">
+
+                </div>
+
+                <h4 class="form-subtitle">Datos opcionales avanzados</h4>
+                <p class="helper-line">Ayudan al chofer y al administrador a dar mejor seguimiento logístico.</p>
+
+                <button type="button" class="btn-secondary optional-modal-open-btn" id="open-optional-fields-modal">Completar datos opcionales</button>
+
+                <div class="client-form-modal" id="client-optional-modal" aria-hidden="true">
+                    <div class="client-form-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="client-optional-modal-title">
+                        <div class="client-form-modal-header">
+                            <h3 id="client-optional-modal-title">Datos opcionales avanzados</h3>
+                            <button type="button" class="client-form-modal-close" data-optional-modal-close aria-label="Cerrar formulario">X</button>
+                        </div>
+
+                        <p class="helper-line modal-helper-line">Estos datos ayudan a mejorar la asignación y el seguimiento del envío.</p>
+
+                        <div class="request-grid optional-modal-grid">
+
+                    <div class="optional-field">
+                        <input type="text" name="direccion_carga" placeholder="Dirección de carga" class="form-control" data-no-aplica-field="direccion_carga">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="direccion_carga">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="text" name="direccion_entrega" placeholder="Dirección de entrega" class="form-control" data-no-aplica-field="direccion_entrega">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="direccion_entrega">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="number" name="distancia_estimada" placeholder="Distancia estimada (km)" class="form-control" step="0.01" min="0" data-no-aplica-field="distancia_estimada">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="distancia_estimada">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="text" name="tiempo_estimado" placeholder="Tiempo estimado" class="form-control" data-no-aplica-field="tiempo_estimado">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="tiempo_estimado">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="number" name="peso" placeholder="Peso estimado (kg)" class="form-control" step="0.01" min="0" data-no-aplica-field="peso">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="peso">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="number" name="volumen" placeholder="Volumen" class="form-control" step="0.01" min="0" data-no-aplica-field="volumen">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="volumen">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="number" name="cantidad_paquetes" placeholder="Paquetes" class="form-control" min="0" data-no-aplica-field="cantidad_paquetes">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="cantidad_paquetes">No aplica</button>
+                    </div>
+
+                    <label class="form-control time-field">
+                        <span>Hora estimada de salida</span>
+                        <input type="time" name="hora_salida" class="form-control">
+                    </label>
+
+                    <label class="form-control time-field">
+                        <span>Hora estimada de llegada</span>
+                        <input type="time" name="hora_llegada" class="form-control">
+                    </label>
+
+                    <div class="optional-field">
+                        <input type="text" name="ubicacion_actual" placeholder="Ubicación actual" class="form-control" data-no-aplica-field="ubicacion_actual">
+                        <div class="optional-actions">
+                            <button type="button" class="field-action-btn geo-action-btn" data-geo-target="ubicacion_actual">Mi ubicación</button>
+                            <button type="button" class="field-action-btn" data-no-aplica-target="ubicacion_actual">No aplica</button>
+                        </div>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="text" name="paradas" placeholder="Paradas" class="form-control" data-no-aplica-field="paradas">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="paradas">No aplica</button>
+                    </div>
+
+                    <div class="optional-field">
+                        <input type="text" name="incidentes" placeholder="Incidentes" class="form-control" data-no-aplica-field="incidentes">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="incidentes">No aplica</button>
+                    </div>
+
+                    <div class="optional-field full">
+                        <input type="text" name="observaciones" placeholder="Observaciones" class="form-control" data-no-aplica-field="observaciones">
+                        <button type="button" class="field-action-btn" data-no-aplica-target="observaciones">No aplica</button>
+                    </div>
+
+                        </div>
+
+                        <div class="client-form-modal-actions">
+                            <button type="button" class="btn-primary" data-optional-modal-close>Guardar y cerrar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="request-actions">
+                    <button type="submit" class="btn-primary" id="client-request-submit">Solicitar Envío</button>
+                    <button type="button" class="btn-secondary" id="client-request-cancel" hidden>Cancelar edición</button>
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div class="section cliente-panel" id="cliente-calificar-chofer">
+
+            <h2 style="color: aliceblue;">Calificar chofer</h2>
+
+            <form action="/cliente/calificar-chofer" method="POST">
+
+                <h4 class="form-subtitle">Califica de 1 a 5 estrellas</h4>
+                <p class="helper-line">Solo aparecen viajes entregados con chofer asignado. Si ya calificaste un viaje, se actualizará tu calificación.</p>
+
+                <div class="request-grid">
+
+                    <select name="trip_id" class="form-control full" required>
+                        <option value="">Selecciona un viaje entregado</option>
+                        <% if (Array.isArray(rateableTrips) && rateableTrips.length > 0) { %>
+                            <% rateableTrips.forEach(function(viaje) { %>
+                                <option value="<%= viaje.trip_id %>">
+                                    <%= viaje.trip_id %> - <%= viaje.origen || '-' %> a <%= viaje.destino || '-' %> (Chofer: <%= viaje.conductor || '-' %>)
+                                    <%= viaje.rating_actual ? (' - Tu calificación actual: ' + viaje.rating_actual + '/5') : '' %>
+                                </option>
+                            <% }) %>
+                        <% } %>
+                    </select>
+
+                    <select name="rating" class="form-control" required>
+                        <option value="">Calificación</option>
+                        <option value="5">5 - Excelente</option>
+                        <option value="4">4 - Muy bueno</option>
+                        <option value="3">3 - Bueno</option>
+                        <option value="2">2 - Regular</option>
+                        <option value="1">1 - Malo</option>
+                    </select>
+
+                    <input type="text" name="comentario" class="form-control full" placeholder="Comentario (opcional)">
+
+                </div>
+
+                <button type="submit" class="btn-primary">Guardar calificación</button>
+
+            </form>
+
+        </div>
+
+        <% 
+            const ratedTrips = (Array.isArray(rateableTrips) ? rateableTrips : []).filter(function(v) {
+                return Number(v.rating_actual || 0) > 0;
+            });
+        %>
+
+        <% if (ratedTrips.length > 0) { %>
+            <div class="section cliente-panel" id="cliente-historial-calificaciones">
+
+                <h2 style="color: aliceblue;">Historial de calificaciones</h2>
+
+                <div class="table-container">
+
+                    <table class="viajes-table">
+
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Viaje</th>
+                                <th>Chofer</th>
+                                <th>Calificación</th>
+                                <th>Comentario</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% ratedTrips.forEach(function(viaje) { 
+                                const fechaBase = viaje.fecha_calificacion;
+                                const fechaObj = fechaBase ? new Date(fechaBase) : null;
+                                const fechaVista = fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-MX') : '-';
+                                const ratingNum = Math.max(1, Math.min(5, Number(viaje.rating_actual || 0)));
+                                const estrellas = '★'.repeat(Math.round(ratingNum)) + '☆'.repeat(5 - Math.round(ratingNum));
+                            %>
+                                <tr>
+                                    <td><%= fechaVista %></td>
+                                    <td><%= viaje.trip_id || '-' %></td>
+                                    <td><%= viaje.conductor || '-' %></td>
+                                    <td><%= estrellas %> (<%= ratingNum %>/5)</td>
+                                    <td><%= viaje.comentario_actual || '-' %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        <% } %>
+
+
+        <div class="welcome-section cliente-panel" id="cliente-bienvenida">
+
+            <h2>Bienvenido a LOGIFLEX</h2>
+
+            <p>Desde aquí puedes solicitar transportes y dar seguimiento a tus envíos.</p>
+
+            <p>Fecha: <%= new Date().toLocaleDateString("es-MX") %>
+            </p>
+
+        </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script id="client-trips-data" type="application/json"><%- JSON.stringify(Array.isArray(clientTrips) ? clientTrips : []) %></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            console.log("Cliente conectado: <%= name %>");
+
+            const mobileSidebarToggle = document.getElementById('cliente-sidebar-mobile-toggle');
+            const clientSidebar = document.getElementById('cliente-sidebar-nav');
+
+            if (mobileSidebarToggle && clientSidebar) {
+                mobileSidebarToggle.addEventListener('click', () => {
+                    const nextOpen = !clientSidebar.classList.contains('is-open');
+                    clientSidebar.classList.toggle('is-open', nextOpen);
+                    mobileSidebarToggle.setAttribute('aria-expanded', nextOpen ? 'true' : 'false');
+                });
+
+                document.querySelectorAll('.cliente-submenu a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        if (window.innerWidth <= 980) {
+                            clientSidebar.classList.remove('is-open');
+                            mobileSidebarToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    });
+                });
+            }
+
+            document.querySelectorAll('.cliente-menu-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-menu-target');
+                    const submenu = targetId ? document.getElementById(targetId) : null;
+                    if (!submenu) return;
+                    submenu.classList.toggle('is-open');
+                });
+            });
+
+            const requestForm = document.getElementById('client-request-form');
+            const requestTitle = document.getElementById('client-request-title');
+            const requestSubmitButton = document.getElementById('client-request-submit');
+            const requestCancelButton = document.getElementById('client-request-cancel');
+            const editingTripIdInput = document.getElementById('editing-trip-id');
+            const optionalModal = document.getElementById('client-optional-modal');
+            const openOptionalModalButton = document.getElementById('open-optional-fields-modal');
+            const requestDefaultTitle = 'Solicitar nuevo envío';
+            const requestEditTitle = 'Editar envío';
+            const dashboardPanels = Array.from(document.querySelectorAll('.cliente-panel'));
+
+            function showOptionalModal() {
+                if (!optionalModal) return;
+                optionalModal.classList.add('is-open');
+                optionalModal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-is-open');
+            }
+
+            function hideOptionalModal() {
+                if (!optionalModal) return;
+                optionalModal.classList.remove('is-open');
+                optionalModal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-is-open');
+            }
+
+            if (openOptionalModalButton) {
+                openOptionalModalButton.addEventListener('click', showOptionalModal);
+            }
+
+            if (optionalModal) {
+                optionalModal.querySelectorAll('[data-optional-modal-close]').forEach(button => {
+                    button.addEventListener('click', hideOptionalModal);
+                });
+
+                optionalModal.addEventListener('click', event => {
+                    if (event.target === optionalModal) hideOptionalModal();
+                });
+            }
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && optionalModal && optionalModal.classList.contains('is-open')) {
+                    hideOptionalModal();
+                }
+            });
+
+            function showDashboardPanel(panelId) {
+                if (!panelId) return;
+
+                dashboardPanels.forEach(panel => {
+                    panel.classList.toggle('is-active-panel', panel.id === panelId);
+                });
+
+                document.querySelectorAll('.cliente-submenu a[data-panel-target]').forEach(link => {
+                    link.classList.toggle('is-active-link', link.getAttribute('data-panel-target') === panelId);
+                });
+
+                if (panelId === 'cliente-seguimiento-mapa') {
+                    setTimeout(() => {
+                        if (clientTripMap) clientTripMap.invalidateSize();
+                    }, 120);
+                }
+            }
+
+            document.querySelectorAll('.cliente-submenu a[data-panel-target]').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const panelId = link.getAttribute('data-panel-target');
+                    const panel = panelId ? document.getElementById(panelId) : null;
+                    if (!panel) return;
+                    showDashboardPanel(panelId);
+                    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
+
+            function clearNoAplicaStates() {
+                document.querySelectorAll('[data-no-aplica-target]').forEach(button => {
+                    button.classList.remove('is-active');
+                    button.textContent = 'No aplica';
+                });
+                document.querySelectorAll('[data-no-aplica-field]').forEach(field => {
+                    field.classList.remove('is-no-aplica');
+                    field.readOnly = false;
+                });
+            }
+
+            function setRequestCreateMode() {
+                if (!requestForm) return;
+                requestForm.action = '/solicitar-envio';
+                if (editingTripIdInput) editingTripIdInput.value = '';
+                if (requestTitle) requestTitle.textContent = requestDefaultTitle;
+                if (requestSubmitButton) requestSubmitButton.textContent = 'Solicitar Envío';
+                if (requestCancelButton) requestCancelButton.hidden = true;
+            }
+
+            function normalizeEditValue(value) {
+                const raw = String(value === null || value === undefined ? '' : value).trim();
+                if (!raw) return '';
+                const normalized = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                const ignored = new Set(['-', 'no aplica', 'n/a', 'na', 'ninguna', 'ninguno', 'null', 'undefined']);
+                return ignored.has(normalized) ? '' : raw;
+            }
+
+            function fillRequestField(name, value) {
+                if (!requestForm) return;
+                const field = requestForm.querySelector(`[name="${name}"]`);
+                if (!field) return;
+                if (field.type === 'number') {
+                    field.value = value === null || value === undefined ? '' : String(value);
+                    return;
+                }
+                field.value = normalizeEditValue(value);
+            }
+
+            function startEditTrip(trip) {
+                if (!requestForm || !trip) return;
+                requestForm.reset();
+                clearNoAplicaStates();
+
+                if (editingTripIdInput) editingTripIdInput.value = String(trip.trip_id || '').trim();
+                requestForm.action = '/cliente/editar-envio';
+
+                if (requestTitle) requestTitle.textContent = requestEditTitle;
+                if (requestSubmitButton) requestSubmitButton.textContent = 'Guardar cambios';
+                if (requestCancelButton) requestCancelButton.hidden = false;
+
+                fillRequestField('origen', trip.origen);
+                fillRequestField('destino', trip.destino);
+                fillRequestField('tipo_mercancia', trip.tipo_mercancia);
+                fillRequestField('valor_mercancia', trip.valor_mercancia);
+                fillRequestField('cliente', trip.cliente || '<%= name %>');
+                fillRequestField('telefono_cliente', trip.firma_cliente);
+                fillRequestField('direccion_carga', trip.direccion_carga);
+                fillRequestField('direccion_entrega', trip.direccion_entrega);
+                fillRequestField('distancia_estimada', trip.distancia_estimada);
+                fillRequestField('tiempo_estimado', trip.tiempo_estimado);
+                fillRequestField('peso', trip.peso);
+                fillRequestField('volumen', trip.volumen);
+                fillRequestField('cantidad_paquetes', trip.cantidad_paquetes);
+                fillRequestField('hora_salida', trip.hora_salida);
+                fillRequestField('hora_llegada', trip.hora_llegada);
+                fillRequestField('ubicacion_actual', trip.ubicacion_actual);
+                fillRequestField('paradas', trip.paradas);
+                fillRequestField('incidentes', trip.incidentes);
+                fillRequestField('observaciones', trip.observaciones);
+
+                showDashboardPanel('cliente-nuevo-envio');
+                const section = document.getElementById('cliente-nuevo-envio');
+                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            if (requestCancelButton) {
+                requestCancelButton.addEventListener('click', () => {
+                    if (!requestForm) return;
+                    requestForm.reset();
+                    clearNoAplicaStates();
+                    setRequestCreateMode();
+                });
+            }
+
+            setRequestCreateMode();
+
+            document.querySelectorAll('[data-no-aplica-target]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const target = button.getAttribute('data-no-aplica-target');
+                    const field = document.querySelector(`[data-no-aplica-field="${target}"]`);
+                    if (!field) return;
+
+                    const isActive = button.classList.contains('is-active');
+
+                    if (isActive) {
+                        button.classList.remove('is-active');
+                        button.textContent = 'No aplica';
+                        field.classList.remove('is-no-aplica');
+                        field.readOnly = false;
+                        if (field.type !== 'number') field.value = '';
+                        field.placeholder = target.charAt(0).toUpperCase() + target.slice(1);
+                        return;
+                    }
+
+                    button.classList.add('is-active');
+                    button.textContent = 'Quitar';
+                    field.classList.add('is-no-aplica');
+
+                    if (field.type === 'number') {
+                        field.value = '';
+                        field.readOnly = true;
+                        field.placeholder = 'No aplica';
+                    } else {
+                        field.value = 'No aplica';
+                        field.readOnly = false;
+                    }
+                });
+            });
+
+            document.querySelectorAll('[data-no-aplica-field]').forEach(field => {
+                field.addEventListener('input', () => {
+                    const target = field.getAttribute('data-no-aplica-field');
+                    const button = document.querySelector(`[data-no-aplica-target="${target}"]`);
+                    if (!button || !button.classList.contains('is-active')) return;
+
+                    if (field.type !== 'number' && field.value === 'No aplica') return;
+
+                    button.classList.remove('is-active');
+                    button.textContent = 'No aplica';
+                    field.classList.remove('is-no-aplica');
+                    field.readOnly = false;
+                });
+            });
+
+            document.querySelectorAll('[data-geo-target]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const target = button.getAttribute('data-geo-target');
+                    const field = document.querySelector(`[data-no-aplica-field="${target}"]`);
+                    if (!field) return;
+
+                    if (!navigator.geolocation) {
+                        alert('Tu navegador no soporta geolocalización.');
+                        return;
+                    }
+
+                    const originalText = button.textContent;
+                    button.disabled = true;
+                    button.textContent = 'Ubicando...';
+
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            const lat = Number(position.coords.latitude).toFixed(6);
+                            const lng = Number(position.coords.longitude).toFixed(6);
+                            field.value = `${lat}, ${lng}`;
+                            field.classList.remove('is-no-aplica');
+                            field.readOnly = false;
+
+                            const noAplicaBtn = document.querySelector(`[data-no-aplica-target="${target}"]`);
+                            if (noAplicaBtn) {
+                                noAplicaBtn.classList.remove('is-active');
+                                noAplicaBtn.textContent = 'No aplica';
+                            }
+
+                            button.disabled = false;
+                            button.textContent = originalText;
+                        },
+                        error => {
+                            button.disabled = false;
+                            button.textContent = originalText;
+                            alert('No se pudo obtener la ubicación del dispositivo. Revisa permisos y vuelve a intentar.');
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 60000
+                        }
+                    );
+                });
+            });
+
+            const clientTripsDataNode = document.getElementById('client-trips-data');
+            const clientTripSelector = document.getElementById('client-trip-selector');
+            const clientMapStatus = document.getElementById('client-map-status');
+            const mexicoCenter = [23.6345, -102.5528];
+            const mexicoBounds = [[14.0, -118.5], [33.0, -86.0]];
+            let clientTripMap = null;
+            let clientMapLayer = null;
+            const geocodeCache = {};
+
+            function safeText(value) {
+                if (value === null || value === undefined || String(value).trim() === '') return '-';
+                return String(value).trim();
+            }
+
+            function setMapStatus(message) {
+                if (clientMapStatus) clientMapStatus.textContent = safeText(message);
+            }
+
+            function readTripsData() {
+                if (!clientTripsDataNode) return [];
+                try {
+                    const parsed = JSON.parse(clientTripsDataNode.textContent || '[]');
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (error) {
+                    return [];
+                }
+            }
+
+            function ensureClientMap() {
+                const mapNode = document.getElementById('client-trip-map');
+                if (!mapNode || typeof L === 'undefined') return null;
+                if (clientTripMap) return clientTripMap;
+
+                clientTripMap = L.map(mapNode, {
+                    center: mexicoCenter,
+                    zoom: 5,
+                    zoomControl: true,
+                    maxBounds: mexicoBounds,
+                    maxBoundsViscosity: 1.0
+                });
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(clientTripMap);
+
+                return clientTripMap;
+            }
+
+            function splitStops(stopsText) {
+                if (!stopsText) return [];
+
+                const ignored = new Set(['-', 'no aplica', 'n/a', 'na', 'ninguna', 'ninguno', 'sin parada', 'sin paradas', 'null', 'undefined']);
+
+                return String(stopsText)
+                    .split(/\n|,|;|\|/)
+                    .map(s => s.trim())
+                    .filter(Boolean)
+                    .filter(s => {
+                        const normalized = s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        return !ignored.has(normalized);
+                    });
+            }
+
+            function cleanPointQuery(value) {
+                const raw = String(value || '').trim();
+                if (!raw) return '';
+                const normalized = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                const ignored = new Set(['-', 'no aplica', 'n/a', 'na', 'ninguna', 'ninguno', 'null', 'undefined']);
+                return ignored.has(normalized) ? '' : raw;
+            }
+
+            function buildLocationPoints(trip) {
+                if (!trip) return [];
+                const rawPoints = [];
+
+                const origen = cleanPointQuery(trip.origen);
+                const ubicacionActual = cleanPointQuery(trip.ubicacion_actual);
+                const destino = cleanPointQuery(trip.destino);
+
+                if (origen) rawPoints.push({ label: 'Origen', query: origen });
+                splitStops(trip.paradas).forEach((p, idx) => {
+                    rawPoints.push({ label: `Parada ${idx + 1}`, query: p });
+                });
+                if (ubicacionActual) rawPoints.push({ label: 'Ubicación actual', query: ubicacionActual });
+                if (destino) rawPoints.push({ label: 'Destino', query: destino });
+
+                const seen = new Set();
+                return rawPoints.filter(item => {
+                    const key = String(item.query || '').trim();
+                    if (!key || key === '-') return false;
+                    const norm = key.toLowerCase();
+                    if (seen.has(norm)) return false;
+                    seen.add(norm);
+                    return true;
+                });
+            }
+
+            function parseCoordinateQuery(query) {
+                const text = String(query || '').trim();
+                const match = text.match(/^(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)$/);
+                if (!match) return null;
+
+                const lat = Number(match[1]);
+                const lng = Number(match[2]);
+                if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+                if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+
+                return { lat, lng };
+            }
+
+            async function geocodeLocation(query) {
+                const key = String(query || '').trim();
+                if (!key || key === '-') return null;
+                if (Object.prototype.hasOwnProperty.call(geocodeCache, key)) {
+                    return geocodeCache[key];
+                }
+
+                const coords = parseCoordinateQuery(key);
+                if (coords) {
+                    geocodeCache[key] = {
+                        lat: coords.lat,
+                        lng: coords.lng,
+                        display: `Coordenadas ${coords.lat.toFixed(6)}, ${coords.lng.toFixed(6)}`
+                    };
+                    return geocodeCache[key];
+                }
+
+                try {
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=mx&q=${encodeURIComponent(key)}`;
+                    const response = await fetch(url, {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    if (!response.ok) {
+                        geocodeCache[key] = null;
+                        return null;
+                    }
+
+                    const data = await response.json();
+                    const first = Array.isArray(data) ? data[0] : null;
+                    if (!first || !first.lat || !first.lon) {
+                        geocodeCache[key] = null;
+                        return null;
+                    }
+
+                    geocodeCache[key] = {
+                        lat: Number(first.lat),
+                        lng: Number(first.lon),
+                        display: first.display_name || key
+                    };
+                    return geocodeCache[key];
+                } catch (error) {
+                    geocodeCache[key] = null;
+                    return null;
+                }
+            }
+
+            async function renderClientTripMap(trip) {
+                const map = ensureClientMap();
+                if (!map) return;
+
+                if (clientMapLayer) {
+                    map.removeLayer(clientMapLayer);
+                    clientMapLayer = null;
+                }
+
+                clientMapLayer = L.layerGroup().addTo(map);
+
+                if (!trip) {
+                    setMapStatus('Selecciona un envío para ver su ubicación.');
+                    map.setView(mexicoCenter, 5);
+                    return;
+                }
+
+                const points = buildLocationPoints(trip);
+                if (points.length === 0) {
+                    setMapStatus('Este envío no tiene ubicaciones suficientes para mostrar en mapa.');
+                    map.setView(mexicoCenter, 5);
+                    return;
+                }
+
+                setMapStatus('Cargando ubicaciones del envío...');
+
+                const resolved = await Promise.all(points.map(async p => {
+                    const geo = await geocodeLocation(p.query);
+                    return geo ? { ...p, ...geo } : null;
+                }));
+
+                const validPoints = resolved.filter(Boolean);
+                if (validPoints.length === 0) {
+                    setMapStatus('No se pudieron localizar las direcciones de este envío.');
+                    map.setView(mexicoCenter, 5);
+                    return;
+                }
+
+                const latLngs = validPoints.map(p => [p.lat, p.lng]);
+
+                function getPointStyle(label) {
+                    const text = String(label || '').toLowerCase();
+                    if (text.startsWith('origen')) {
+                        return { color: '#16a34a', fillColor: '#22c55e', text: 'Origen' };
+                    }
+                    if (text.startsWith('ubicacion actual') || text.startsWith('ubicación actual')) {
+                        return { color: '#ca8a04', fillColor: '#facc15', text: 'Ubicación actual' };
+                    }
+                    if (text.startsWith('destino')) {
+                        return { color: '#dc2626', fillColor: '#ef4444', text: 'Destino' };
+                    }
+                    if (text.startsWith('parada')) {
+                        return { color: '#2563eb', fillColor: '#3b82f6', text: 'Parada' };
+                    }
+                    return { color: '#0ea5e9', fillColor: '#38bdf8', text: String(label || 'Punto') };
+                }
+
+                validPoints.forEach((point) => {
+                    const style = getPointStyle(point.label);
+                    const marker = L.circleMarker([point.lat, point.lng], {
+                        radius: 8,
+                        color: style.color,
+                        weight: 2,
+                        fillColor: style.fillColor,
+                        fillOpacity: 0.95
+                    }).addTo(clientMapLayer);
+                    marker.bindPopup(`<strong>${point.label}</strong><br>${point.query}<br><small>${point.display}</small>`);
+                    marker.bindTooltip(style.text, {
+                        permanent: true,
+                        direction: 'top',
+                        className: 'trip-point-label',
+                        offset: [0, -10]
+                    });
+                });
+
+                if (latLngs.length > 1) {
+                    L.polyline(latLngs, { color: '#38bdf8', weight: 4, opacity: 0.9 }).addTo(clientMapLayer);
+                    map.fitBounds(latLngs, { padding: [25, 25] });
+                } else {
+                    map.setView(latLngs[0], 12);
+                }
+
+                const unresolved = points.length - validPoints.length;
+                if (unresolved > 0) {
+                    setMapStatus(`Ruta cargada parcialmente. ${unresolved} ubicacion(es) no pudieron geocodificarse.`);
+                } else {
+                    setMapStatus('Ruta cargada correctamente.');
+                }
+            }
+
+            const clientTrips = readTripsData();
+            if (clientTripSelector) {
+                if (clientTrips.length > 0) {
+                    const options = clientTrips.slice(0, 30).map((trip, index) => {
+                        const tripId = safeText(trip.trip_id);
+                        const origen = safeText(trip.origen);
+                        const destino = safeText(trip.destino);
+                        const estado = safeText(trip.estado_viaje);
+                        return `<option value="${index}">${tripId} - ${origen} -> ${destino} (${estado})</option>`;
+                    });
+                    clientTripSelector.insertAdjacentHTML('beforeend', options.join(''));
+                    clientTripSelector.value = '0';
+                    renderClientTripMap(clientTrips[0]);
+                } else {
+                    clientTripSelector.innerHTML = '<option value="">Sin envíos registrados</option>';
+                    clientTripSelector.disabled = true;
+                    renderClientTripMap(null);
+                }
+
+                clientTripSelector.addEventListener('change', function () {
+                    const idx = Number(this.value);
+                    if (!Number.isFinite(idx) || idx < 0 || idx >= clientTrips.length) {
+                        renderClientTripMap(null);
+                        return;
+                    }
+                    renderClientTripMap(clientTrips[idx]);
+                });
+            }
+
+            document.querySelectorAll('.viajes-table tbody tr[data-trip-id]').forEach((row) => {
+                row.addEventListener('click', () => {
+                    const selectedTripId = String(row.getAttribute('data-trip-id') || '').trim();
+                    if (!selectedTripId || !clientTripSelector || !clientTrips.length) return;
+
+                    const idx = clientTrips.findIndex(t => String(t.trip_id || '').trim() === selectedTripId);
+                    if (idx >= 0) {
+                        clientTripSelector.value = String(idx);
+                        showDashboardPanel('cliente-seguimiento-mapa');
+                        renderClientTripMap(clientTrips[idx]);
+                        const mapSection = document.getElementById('cliente-seguimiento-mapa');
+                        if (mapSection) mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            document.querySelectorAll('.trip-edit-btn[data-edit-trip-id]').forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const tripId = String(button.getAttribute('data-edit-trip-id') || '').trim();
+                    if (!tripId || !clientTrips.length) return;
+
+                    const trip = clientTrips.find(t => String(t.trip_id || '').trim() === tripId);
+                    if (!trip) return;
+
+                    startEditTrip(trip);
+                });
+            });
+
+            const feedback = document.querySelector('.feedback-message');
+            if (feedback) {
+                setTimeout(() => {
+                    feedback.classList.add('hide');
+                    setTimeout(() => feedback.remove(), 360);
+                }, 3500);
+            }
+
+        });
+
+    </script>
+
+    
+<section class="info">
+    <div class="info-box">
+      <h4>Desde el blog</h4>
+      <p>La mejor seguridad para tu negocio </p>
+    </div>
+
+    <div class="info-box">
+      <h4>Qué hacemos</h4>
+      <p>Impulsamos la eficiencia logística 
+        de nuestros clientes mediante soluciones 
+        de transporte y gestión que garantizan control, 
+        optimización de recursos y crecimiento sostenible. </p>
+    </div>
+
+    <div class="info-box">
+      <h4>CONTACTO</h4>
+      <p>México<br>+52 276 135 1234</p>
+    </div>
+  </section>
+
+
+</body>
+
+</html>

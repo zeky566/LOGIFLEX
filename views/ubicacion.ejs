@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    
+</head>
+<body>
+    
+     <!--            localizacion        -->   
+
+ <div class="container">
+    <h1>📍 Ubicación en Tiempo Real</h1>
+    <div id="map"></div>
+    <p id="status">Esperando permiso...</p>
+  <div>
+    
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+
+  <script>
+    const status = document.getElementById("status");
+
+    // Crear mapa centrado en México inicialmente
+    const map = L.map("map").setView([19.4326, -99.1332], 13);
+
+    // Cargar mapa base gratuito (OpenStreetMap)
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
+    }).addTo(map);
+
+    let marker;
+
+    if (navigator.geolocation) {
+      status.textContent = "Obteniendo ubicación...";
+
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+
+          status.textContent = "Ubicación actualizada ✅";
+
+          if (!marker) {
+            marker = L.marker([lat, lng]).addTo(map);
+          } else {
+            marker.setLatLng([lat, lng]);
+          }
+
+          map.setView([lat, lng], 16);
+        },
+        (error) => {
+          status.textContent = "Error: " + error.message;
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 5000
+        }
+      );
+    } else {
+      status.textContent = "Geolocalización no soportada ❌";
+    }
+  </script>
+ 
+ 
+
+  
+</body>
+</html>

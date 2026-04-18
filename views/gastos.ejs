@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Costos Operativos</title>
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* =======================
+           Reset & Base
+        ======================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+        }
+
+        .container,
+        .section-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .section-content {
+            padding: 2rem 15px;
+        }
+
+        /* =======================
+           Card
+        ======================= */
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            transition: 0.3s ease;
+            border: 1px solid #eef2f6;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f0f4f8;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #1e293b;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 0.5rem 0;
+        }
+
+        .card-icon {
+            color: #3b82f6;
+            font-size: 1.5rem;
+        }
+
+        /* =======================
+           Buttons
+        ======================= */
+        .btn {
+            display: inline-block;
+            background-color: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: #10b981;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-warning {
+            background-color: #f59e0b;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        .btn-danger {
+            background-color: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        /* =======================
+           Forms
+        ======================= */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #1e293b;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+
+        /* =======================
+           Costs Section
+        ======================= */
+        #costs {
+            padding: 2rem 0;
+        }
+
+        #costs h1 {
+            font-size: 2.2rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        #month-cost {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* =======================
+           Table
+        ======================= */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+
+        #costs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        #costs-table th,
+        #costs-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        #costs-table th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #costs-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        #costs-table .btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            border-radius: 6px;
+        }
+
+        /* =======================
+           Modal
+        ======================= */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #0f172a;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #94a3b8;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #475569;
+        }
+
+        /* =======================
+           Empty State
+        ======================= */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            margin-bottom: 1.5rem;
+            color: #64748b;
+        }
+
+        /* =======================
+           Badges
+        ======================= */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* =======================
+           Responsive
+        ======================= */
+        @media (max-width: 768px) {
+            .card-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            #costs-table th,
+            #costs-table td {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+
+            #costs h1 {
+                font-size: 1.8rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utilidades */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 1rem;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Costs Section -->
+    <section id="costs" class="section-content">
+        <h1>Control de Costos Operativos</h1>
+        <p class="subtitle">Gestión de gastos por servicio y costos operativos</p>
+        
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Costos del Mes</h3>
+                    <i class="fas fa-calendar-alt card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div id="month-cost">$0.00</div>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Total gastado este mes</p>
+                    <div style="height: 150px;">
+                        <canvas id="costs-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Distribución de Costos</h3>
+                    <i class="fas fa-chart-pie card-icon"></i>
+                </div>
+                <div class="card-body">
+                    <div style="height: 200px;">
+                        <canvas id="cost-distribution-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Registro de Gastos</h3>
+                <button class="btn" id="add-cost-btn">
+                    <i class="fas fa-plus" style="margin-right: 8px;"></i>
+                    Registrar Gasto
+                </button>
+            </div>
+            <div class="table-container">
+                <table id="costs-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Categoría</th>
+                            <th>Viaje Asociado</th>
+                            <th>Monto</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="costs-body">
+                        <tr id="no-costs">
+                            <td colspan="7" class="empty-state">
+                                <i class="fas fa-dollar-sign"></i>
+                                <h3>No hay gastos registrados</h3>
+                                <p>Comience agregando su primer gasto para ver la información aquí.</p>
+                                <button class="btn btn-success" id="add-first-cost">
+                                    <i class="fas fa-plus" style="margin-right: 8px;"></i>
+                                    Agregar Primer Gasto
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para registrar gasto -->
+    <div id="add-cost-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Registrar Nuevo Gasto</h3>
+                <button class="close-modal" id="close-cost-modal">&times;</button>
+            </div>
+            <form id="cost-form">
+                <div class="form-group">
+                    <label for="cost-description">Descripción del Gasto</label>
+                    <input type="text" id="cost-description" class="form-control" 
+                           placeholder="Descripción" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cost-category">Categoría</label>
+                    <select id="cost-category" class="form-control" required>
+                        <option value="">Seleccione una categoría</option>
+                        <option value="fuel">⛽ Combustible</option>
+                        <option value="maintenance">🔧 Mantenimiento</option>
+                        <option value="personnel">👥 Personal</option>
+                        <option value="tolls">🛣️ Peajes</option>
+                        <option value="insurance">🛡️ Seguros</option>
+                        <option value="other">📦 Otros</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cost-trip">Viaje Asociado (Opcional)</label>
+                    <select id="cost-trip" class="form-control">
+                        <option value="">— No asociar a un viaje —</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cost-amount">Monto ($)</label>
+                    <input type="number" id="cost-amount" class="form-control" 
+                           placeholder="0.00" step="0.01" min="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cost-date">Fecha del Gasto</label>
+                    <input type="date" id="cost-date" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn btn-success" style="width: 100%; padding: 12px;">
+                    <i class="fas fa-save" style="margin-right: 8px;"></i>
+                    Guardar Gasto
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // =======================
+        // Variables Globales
+        // =======================
+        let costs = [];
+        let trips = [];
+        let costsChart = null;
+        let distributionChart = null;
+
+        // =======================
+        // Inicialización
+        // =======================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            initCostsEvents();
+            initCharts();
+            updateCostsTable();
+            updateTripSelects();
+        });
+
+        // =======================
+        // Carga de Datos
+        // =======================
+        function loadData() {
+            // Cargar costos
+            const savedCosts = localStorage.getItem('transportCosts');
+            costs = savedCosts ? JSON.parse(savedCosts) : [];
+            
+            // Cargar viajes o usar datos de ejemplo
+            const savedTrips = localStorage.getItem('transportTrips');
+            trips = savedTrips ? JSON.parse(savedTrips) : [
+                
+            ];
+            
+            // Guardar viajes de ejemplo si no existían
+            if (!savedTrips && trips.length > 0) {
+                localStorage.setItem('transportTrips', JSON.stringify(trips));
+            }
+        }
+
+        // =======================
+        // Funciones del Modal
+        // =======================
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                if (modalId === 'add-cost-modal') {
+                    updateTripSelects();
+                    // Establecer fecha actual
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('cost-date').value = today;
+                }
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                // Resetear formulario
+                if (modalId === 'add-cost-modal') {
+                    document.getElementById('cost-form').reset();
+                }
+            }
+        }
+
+        // =======================
+        // Actualizar Tabla
+        // =======================
+        function updateCostsTable() {
+            const costsBody = document.getElementById('costs-body');
+            const noCostsRow = document.getElementById('no-costs');
+            
+            if (costs.length > 0) {
+                noCostsRow.style.display = 'none';
+                costsBody.innerHTML = '';
+                
+                // Ordenar por fecha descendente
+                const sortedCosts = [...costs].sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                sortedCosts.forEach(cost => {
+                    const associatedTrip = cost.tripId ? trips.find(t => t.id === cost.tripId) : null;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><span class="badge badge-info">#${cost.id}</span></td>
+                        <td><strong>${cost.description}</strong></td>
+                        <td>${getCostCategoryText(cost.category)}</td>
+                        <td>${associatedTrip ? `TRP-${cost.tripId.toString().padStart(3, '0')}` : '—'}</td>
+                        <td><strong>$${cost.amount.toFixed(2)}</strong></td>
+                        <td>${formatDate(cost.date)}</td>
+                        <td>
+                            <button class="btn" onclick="viewCostDetails(${cost.id})" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-warning" onclick="editCost(${cost.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteCost(${cost.id})" title="Eliminar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    costsBody.appendChild(row);
+                });
+            } else {
+                noCostsRow.style.display = '';
+                costsBody.innerHTML = '';
+                costsBody.appendChild(noCostsRow);
+            }
+            
+            updateMonthlyTotal();
+            updateCharts();
+        }
+
+        // =======================
+        // Actualizar Total Mensual
+        // =======================
+        function updateMonthlyTotal() {
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const monthlyCosts = costs.reduce((total, cost) => {
+                const costDate = new Date(cost.date);
+                if (costDate.getMonth() === currentMonth && costDate.getFullYear() === currentYear) {
+                    return total + cost.amount;
+                }
+                return total;
+            }, 0);
+            
+            document.getElementById('month-cost').textContent = `$${monthlyCosts.toFixed(2)}`;
+        }
+
+        // =======================
+        // Manejar Nuevo Gasto
+        // =======================
+        function handleAddCost(e) {
+            e.preventDefault();
+
+            const description = document.getElementById('cost-description').value.trim();
+            const category = document.getElementById('cost-category').value;
+            const tripSelect = document.getElementById('cost-trip');
+            const tripId = tripSelect && tripSelect.value ? parseInt(tripSelect.value) : null;
+            const amount = parseFloat(document.getElementById('cost-amount').value);
+            const date = document.getElementById('cost-date').value;
+
+            // Validaciones
+            if (!description) {
+                alert('Por favor ingresa una descripción del gasto.');
+                return;
+            }
+            if (!category) {
+                alert('Por favor selecciona una categoría.');
+                return;
+            }
+            if (isNaN(amount) || amount <= 0) {
+                alert('Por favor ingresa un monto válido mayor a 0.');
+                return;
+            }
+            if (!date) {
+                alert('Por favor selecciona una fecha.');
+                return;
+            }
+
+            // Crear nuevo gasto
+            const newCost = {
+                id: costs.length > 0 ? Math.max(...costs.map(c => c.id)) + 1 : 1,
+                description,
+                category,
+                tripId,
+                amount,
+                date
+            };
+
+            // Agregar a la lista
+            costs.push(newCost);
+            
+            // Guardar en localStorage
+            localStorage.setItem('transportCosts', JSON.stringify(costs));
+
+            // Cerrar modal y limpiar
+            closeModal('add-cost-modal');
+            document.getElementById('cost-form').reset();
+
+            // Actualizar todo
+            updateCostsTable();
+            
+            // Mostrar mensaje de éxito
+            showNotification('Gasto registrado exitosamente', 'success');
+        }
+
+        // =======================
+        // Eliminar Gasto
+        // =======================
+        function deleteCost(costId) {
+            if (confirm('¿Estás seguro de que deseas eliminar este gasto?')) {
+                costs = costs.filter(c => c.id !== costId);
+                localStorage.setItem('transportCosts', JSON.stringify(costs));
+                updateCostsTable();
+                showNotification('Gasto eliminado correctamente', 'warning');
+            }
+        }
+
+        // =======================
+        // Ver Detalles
+        // =======================
+        function viewCostDetails(costId) {
+            const cost = costs.find(c => c.id === costId);
+            if (cost) {
+                const associatedTrip = cost.tripId ? trips.find(t => t.id === cost.tripId) : null;
+                const tripText = associatedTrip ? 
+                    `${associatedTrip.origin} → ${associatedTrip.destination}` : 
+                    'No asociado a ningún viaje';
+                
+                alert(`
+📋 DETALLES DEL GASTO #${costId}
+
+📝 Descripción: ${cost.description}
+📂 Categoría: ${getCostCategoryText(cost.category)}
+💰 Monto: $${cost.amount.toFixed(2)}
+📅 Fecha: ${formatDate(cost.date)}
+🚚 Viaje: ${tripText}
+                `);
+            }
+        }
+
+        // =======================
+        // Editar Gasto
+        // =======================
+        function editCost(costId) {
+            alert(`Función de edición para el gasto #${costId}\nPróximamente disponible.`);
+        }
+
+        // =======================
+        // Utilidades
+        // =======================
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric' 
+            });
+        }
+
+        function getCostCategoryText(category) {
+            const categoryMap = {
+                'fuel': '⛽ Combustible',
+                'maintenance': '🔧 Mantenimiento',
+                'personnel': '👥 Personal',
+                'tolls': '🛣️ Peajes',
+                'insurance': '🛡️ Seguros',
+                'other': '📦 Otros'
+            };
+            return categoryMap[category] || category;
+        }
+
+        function showNotification(message, type = 'success') {
+            // Por ahora usamos alert, pero podrías implementar un toast
+            alert(message);
+        }
+
+        // =======================
+        // Actualizar Selects de Viajes
+        // =======================
+        function updateTripSelects() {
+            const costTripSelect = document.getElementById('cost-trip');
+            if (costTripSelect) {
+                costTripSelect.innerHTML = '<option value="">— No asociar a un viaje —</option>';
+                
+                if (trips.length > 0) {
+                    trips.forEach(trip => {
+                        const option = document.createElement('option');
+                        option.value = trip.id;
+                        option.textContent = `TRP-${trip.id.toString().padStart(3, '0')}: ${trip.origin} → ${trip.destination}`;
+                        costTripSelect.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        // =======================
+        // Gráficos
+        // =======================
+        function initCharts() {
+            // Destruir gráficos existentes
+            if (costsChart) costsChart.destroy();
+            if (distributionChart) distributionChart.destroy();
+
+            // Gráfico de línea
+            const ctx1 = document.getElementById('costs-chart')?.getContext('2d');
+            if (ctx1) {
+                costsChart = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: getLast6Months(),
+                        datasets: [{
+                            label: 'Costos Mensuales',
+                            data: getMonthlyData(),
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#3b82f6',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => `$${context.parsed.y.toFixed(2)}`
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: (value) => '$' + value
+                                },
+                                grid: { color: '#e2e8f0' }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico de pastel
+            const ctx2 = document.getElementById('cost-distribution-chart')?.getContext('2d');
+            if (ctx2) {
+                distributionChart = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Combustible', 'Mantenimiento', 'Personal', 'Peajes', 'Seguros', 'Otros'],
+                        datasets: [{
+                            data: getCategoryData(),
+                            backgroundColor: [
+                                '#3b82f6', // Azul - Combustible
+                                '#10b981', // Verde - Mantenimiento
+                                '#f59e0b', // Amarillo - Personal
+                                '#ef4444', // Rojo - Peajes
+                                '#8b5cf6', // Púrpura - Seguros
+                                '#94a3b8'  // Gris - Otros
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 15,
+                                    font: { size: 11 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (context) => {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                        return `${label}: $${value.toFixed(2)} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function getLast6Months() {
+            const months = [];
+            const date = new Date();
+            const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(date.getFullYear(), date.getMonth() - i, 1);
+                months.push(monthNames[d.getMonth()]);
+            }
+            
+            return months;
+        }
+
+        function getMonthlyData() {
+            const monthlyData = [0, 0, 0, 0, 0, 0];
+            const currentDate = new Date();
+            
+            costs.forEach(cost => {
+                const costDate = new Date(cost.date);
+                const monthDiff = (currentDate.getFullYear() - costDate.getFullYear()) * 12 + 
+                                 (currentDate.getMonth() - costDate.getMonth());
+                
+                if (monthDiff >= 0 && monthDiff < 6) {
+                    const index = 5 - monthDiff;
+                    monthlyData[index] += cost.amount;
+                }
+            });
+            
+            return monthlyData;
+        }
+
+        function getCategoryData() {
+            const categoryTotals = {
+                'fuel': 0,
+                'maintenance': 0,
+                'personnel': 0,
+                'tolls': 0,
+                'insurance': 0,
+                'other': 0
+            };
+            
+            costs.forEach(cost => {
+                if (categoryTotals.hasOwnProperty(cost.category)) {
+                    categoryTotals[cost.category] += cost.amount;
+                }
+            });
+            
+            return [
+                categoryTotals.fuel,
+                categoryTotals.maintenance,
+                categoryTotals.personnel,
+                categoryTotals.tolls,
+                categoryTotals.insurance,
+                categoryTotals.other
+            ];
+        }
+
+        function updateCharts() {
+            if (costsChart) {
+                costsChart.data.labels = getLast6Months();
+                costsChart.data.datasets[0].data = getMonthlyData();
+                costsChart.update();
+            }
+
+            if (distributionChart) {
+                distributionChart.data.datasets[0].data = getCategoryData();
+                distributionChart.update();
+            }
+        }
+
+        // =======================
+        // Eventos
+        // =======================
+        function initCostsEvents() {
+            // Botones para abrir modal
+            document.getElementById('add-cost-btn')?.addEventListener('click', () => openModal('add-cost-modal'));
+            document.getElementById('add-first-cost')?.addEventListener('click', () => openModal('add-cost-modal'));
+            
+            // Botón para cerrar modal
+            document.getElementById('close-cost-modal')?.addEventListener('click', () => closeModal('add-cost-modal'));
+            
+            // Formulario
+            document.getElementById('cost-form')?.addEventListener('submit', handleAddCost);
+            
+            // Cerrar modal al hacer clic fuera
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('add-cost-modal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+/* Contenedor principal del panel del chofer */
+        .chofer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Cabecera con nombre del chofer, rol y boton de cierre de sesion */
+        .chofer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Titulo principal con el nombre del usuario dentro del header */
+        .user-info h1 {
+            margin: 0 0 10px 0;
+            font-size: 34px;
+        }
+
+        /* Bloque de detalles del usuario (correo, rol, etc.) */
+        .user-details {
+            font-size: 16px;
+        }
+
+        /* Mensaje de bienvenida en el header */
+        .welcome-message {
+            margin: 5px 0;
+            font-size: 23px;
+        }
+
+        /* Fila que contiene la etiqueta de rol */
+        .user-role {
+            margin: 5px 0;
+        }
+
+        /* Etiqueta visual que indica el rol del usuario (ej: CHOFER) */
+        .role-badge {
+            background-color: #004D61;
+            color: #f7f3f3;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Boton para cerrar sesion ubicado en el header */
+        .btn-logout {
+            background-color: #0c0c0c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color .3s;
+            filter: drop-shadow(0 0 5px #fff);
+        }
+
+        .btn-logout:hover {
+            background-color: #000000;
+        }
+
+        /* Rejilla de tarjetas de resumen con los KPIs del chofer */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chofer-dashboard-layout {
+            display: grid;
+            grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .chofer-dashboard-sidebar {
+            position: sticky;
+            top: 16px;
+            background: linear-gradient(180deg, #042c38 0%, #071015 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 18px;
+            color: #f8fafc;
+            box-shadow: 0 12px 32px rgba(2, 6, 23, 0.22);
+        }
+
+        .chofer-dashboard-kicker {
+            margin: 0 0 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #7dd3fc;
+        }
+
+        .chofer-dashboard-sidebar h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #f8fafc;
+        }
+
+        .chofer-dashboard-copy {
+            margin: 10px 0 18px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .chofer-dashboard-nav {
+            display: grid;
+            gap: 10px;
+        }
+
+        .chofer-dashboard-link,
+        .chofer-dashboard-toggle {
+            border: 1px solid rgba(125, 211, 252, 0.25);
+            background: rgba(15, 23, 42, 0.55);
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .chofer-dashboard-link.is-active,
+        .chofer-dashboard-link:hover,
+        .chofer-dashboard-toggle:hover {
+            background: linear-gradient(135deg, #0f766e 0%, #164e63 100%);
+            color: #f8fafc;
+        }
+
+        .chofer-dashboard-main {
+            min-width: 0;
+        }
+
+        .chofer-dashboard-toggle {
+            display: none;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .chofer-dashboard-panel {
+            display: none;
+        }
+
+        .chofer-dashboard-panel.is-active-panel {
+            display: block;
+        }
+
+        /* Tarjeta base reutilizable para mostrar estadisticas */
+        .card {
+            background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid #ddd;
+        }
+
+        /* Efecto al pasar el cursor sobre una tarjeta */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Titulo descriptivo dentro de cada tarjeta */
+        .card h3 {
+            margin-top: 0;
+            color: #f8f1f1;
+            font-size: 16px;
+        }
+
+        /* Numero destacado que representa el valor del KPI */
+        .card-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f7f8f8;
+            margin: 10px 0;
+        }
+        .card p {
+            color: #f6f7f8;
+            
+        }
+
+        /* Bloque de contenido generico (tabla, formulario, viaje activo, etc.) */
+        .section {
+           background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+        }
+
+        /* Titulo de cada seccion con linea divisoria inferior */
+        .section h2 {
+            margin-top: 0;
+            color: #fffafa;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Envoltorio con scroll horizontal para tablas en pantallas pequenas */
+        .table-container {
+            overflow-x: auto;
+            background: #000000;
+        }
+
+        /* Tabla de viajes asignados al chofer */
+        .viajes-table {
+            width: 100%;
+            border-collapse: collapse;
+            
+        }
+
+        /* Encabezados de la tabla de viajes */
+        .viajes-table th {
+            background-color: #000000;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        /* Celdas de datos de la tabla de viajes */
+        .viajes-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Resaltado de fila al pasar el cursor */
+        .viajes-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .viajes-table tr.selected-trip-row {
+            background-color: #dbeafe;
+        }
+
+        /* Etiqueta de estado base para los viajes */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Estado: viaje pendiente de inicio */
+        .badge.pendiente {
+            background-color: #7A7A7A;
+            color: #333;
+        }
+
+        /* Estado: viaje confirmado y en curso */
+        .badge.confirmado {
+            background-color: #28a745;
+            color: white;
+        }
+
+        /* Estado: viaje finalizado */
+        .badge.completado {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        /* Boton compacto para acciones rapidas dentro de la tabla */
+        .btn-small {
+            background-color: #004D61;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .btn-small:hover {
+            background-color: #5a67d8;
+        }
+
+        /* Tarjeta del viaje activo con borde izquierdo destacado */
+        .viaje-activo {
+           background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #004D61;
+        }
+
+        .viaje-activo-id {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            background: rgba(15, 23, 42, 0.45);
+            color: #e2e8f0;
+            font-size: 13px;
+        }
+
+        .viaje-activo-id strong {
+            color: #f8fafc;
+            letter-spacing: 0.3px;
+        }
+
+        /* Rejilla de datos del viaje activo (origen, destino, cliente, etc.) */
+        .viaje-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            
+        }
+
+        /* Elemento individual de informacion (etiqueta + valor) */
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            
+        }
+
+        /* Texto pequeno descriptivo del campo (ej: "Origen") */
+        .label {
+            font-size: 12px;
+            color: #faf4f4;
+            margin-bottom: 5px;
+        }
+
+        /* Valor del campo mostrado en grande y negrita */
+        .value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #7A7A7A;
+        }
+
+        /* Fondo gris de la barra de progreso del viaje */
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Relleno de color que representa el porcentaje completado del viaje */
+        .progress {
+            height: 100%;
+            background-color: #004D61;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            font-size: 12px;
+        }
+
+        /* Fila de botones de accion del viaje activo */
+        .viaje-acciones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Boton principal de accion (enviar formularios, confirmar, etc.) */
+        .btn-primary {
+            background-color: #004D61;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a67d8;
+        }
+
+        /* Boton secundario para acciones opcionales o de cancelacion */
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Boton de exito para confirmar acciones completadas */
+        .btn-success {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-success:hover {
+            background-color: #7A7A7A;
+        }
+
+        /* Fondo del formulario de registro de gastos */
+        .gastos-form {
+            background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Fila de campos del formulario de gastos en una sola linea */
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Campo de entrada generico para formularios */
+        .form-control {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* Rejilla de campos del formulario de actualizacion de viaje */
+        .trip-update-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        /* Campo que ocupa el ancho completo dentro de la rejilla */
+        .trip-update-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        .trip-update-helper {
+            margin: 0 0 12px;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        body.modal-is-open {
+            overflow: hidden;
+        }
+
+        .trip-update-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.72);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 1200;
+        }
+
+        .trip-update-modal.is-open {
+            display: flex;
+        }
+
+        .trip-update-modal-dialog {
+            width: min(920px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: linear-gradient(180deg, #063a4a 0%, #041b25 100%);
+            border: 1px solid #1b5c73;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 18px 36px rgba(2, 6, 23, 0.5);
+        }
+
+        .trip-update-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .trip-update-modal-header h3 {
+            margin: 0;
+            color: #f8fafc;
+            font-size: 22px;
+        }
+
+        .trip-update-modal-close {
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: transparent;
+            color: #f8fafc;
+            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .trip-update-modal-close:hover {
+            background: rgba(148, 163, 184, 0.18);
+        }
+
+        .trip-update-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* Mensaje de feedback que aparece tras enviar un formulario */
+        .feedback-message {
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            opacity: 1;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        /* Estado oculto para animar la salida del mensaje de feedback */
+        .feedback-message.hide {
+            opacity: 0;
+            transform: translateY(-4px);
+        }
+
+        /* Variante verde para mensajes de exito */
+        .feedback-message.success {
+            background: #d8f3dc;
+            color: #1b5e20;
+            border-color: #95d5b2;
+        }
+
+        /* Variante roja para mensajes de error */
+        .feedback-message.error {
+            background: #fde2e4;
+            color: #9d0208;
+            border-color: #ffb3c1;
+        }
+
+        /* Bloque de bienvenida al final de la pagina */
+        .welcome-section {
+            background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Titulo dentro del bloque de bienvenida (sin borde inferior) */
+        .welcome-section h2 {
+            color: white;
+            margin-top: 0;
+            border-bottom: none;
+        }
+
+        /* Ajustes para pantallas moviles (menos de 768px) */
+        @media (max-width: 768px) {
+            .chofer-dashboard-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .chofer-dashboard-sidebar {
+                display: none;
+                position: static;
+            }
+
+            .chofer-dashboard-sidebar.is-open {
+                display: block;
+            }
+
+            .chofer-dashboard-toggle {
+                display: block;
+            }
+
+            .chofer-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .btn-logout {
+                margin-top: 15px;
+            }
+
+            .viaje-acciones {
+                flex-direction: column;
+            }
+
+            .form-inline {
+                flex-direction: column;
+            }
+        }
+
+        .logo{
+            filter: drop-shadow(0 0 1px #fff);
+        }

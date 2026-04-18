@@ -1,0 +1,140 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ================= BODY ================= */
+
+body{
+   background-color: #000000;
+   min-height:100vh;
+   display:flex;
+   justify-content:center;
+   align-items:center;
+}
+
+/* ================= LOGIN ================= */
+
+.login-form{
+    width:300px;
+    padding:40px;
+    text-align:center;
+
+    background:rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+
+    border-radius:15px;
+    border:2px solid #004D61;
+
+    box-shadow:
+        0 0 10px #004D61,
+        0 0 30px #00eaff,
+        inset 0 0 10px #00eaff;
+}
+
+/* TITULO */
+
+.login-form h2{
+    color:white;
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+/* INPUTS */
+
+.login-form input[type="text"],
+.login-form input[type="password"]{
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+
+    background:transparent;
+    border:2px solid #00eaff;
+    border-radius:25px;
+
+    color:white;
+    outline:none;
+
+    transition:0.3s;
+}
+
+.login-form input::placeholder{
+    color:#504f4f;
+    text-align: center;
+}
+
+.login-form input:focus{
+    box-shadow:0 0 10px #00eaff;
+}
+
+/* ================= BOTON LOGIN ================= */
+
+.btn-login{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+
+    border:none;
+    border-radius:25px;
+
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+
+    background:linear-gradient(90deg,#7A7A7A,#0088ff);
+    box-shadow:0 0 10px #00eaff;
+}
+
+.btn-login:hover{
+    box-shadow:
+        0 0 10px #00eaff,
+        0 0 30px #00eaff;
+}
+
+/* ================= BOTON REGISTER ================= */
+
+.btn-register{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+
+    border:none;
+    border-radius:25px;
+
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+    text-decoration:none;
+    display:inline-block;
+
+    background:linear-gradient(90deg,#004D61,#1a36ff);
+}
+
+.btn-register:hover{
+    box-shadow:
+        0 0 10px #4b6cff,
+        0 0 20px #1a36ff;
+}
+.img1{
+    display: grid;
+   
+    
+    max-width: 390px;
+    
+  
+    border-radius: 10px;
+
+    box-shadow:
+        0 0 10px #004D61,
+        0 0 30px #00eaff,
+        inset 0 0 10px #00eaff;
+}
+
+.container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:60px;
+}

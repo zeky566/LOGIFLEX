@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="stylesheet" href="resources/css/registro.css">
+    <title>Register</title>
+</head>
+
+<body>
+    
+    <div class="container">
+        <div>
+            <img src="/resources/c6.jpg" alt="" class="img1">
+        </div>
+        <div class="register-form">
+            <h1>Bienvenido al sistema de registro de LOGIFLEX</h1>
+            <form action="register" method="POST">
+
+                <label for="user" class="label">Usuario</label>
+                <input type="text" name="user" placeholder="Ej: tu_alias" required>
+
+                <label for="name" class="label" >Nombre</label>
+                <input type="text" name="name" placeholder="Ej: Nombre completo" required>
+
+                <label for="telefono" class="label">Número de teléfono</label>
+                <input type="tel" name="telefono" placeholder="Ej: 5512345678" pattern="[0-9+\-() ]{7,20}" required>
+
+                <label for="rol" class="rol-lab">Rol</label>
+                <select name="rol" id="rol" class="select-css">
+                    <option value="admin" selected>Administrador</option>
+                    <option value="cliente">cliente</option>
+                    <option value="chofer">chofer</option>
+
+                </select>
+                <br>
+
+                <label for="pass" class="label">Contraseña</label>
+                <input type="password" name="pass" required>
+                <br>
+                <br>
+
+                <div style="display: inline;">
+                    <a href="/" class="btn-cancel">Cancelar</a>
+                    <input type="submit" class="btn-save" value="Guardar">
+
+                </div>
+
+
+            </form>
+        </div>
+        
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <% if (typeof alert !=='undefined' && alert) { %>
+        <script>
+            Swal.fire({
+                title: '<%= alert.Title || "Bienvenidos a LOGIFLEX" %>',
+                text: '<%= alert.Text || "" %>',
+                icon: '<%= alert.Icon || "info" %>',
+                showConfirmButton: <%= alert.showConfirmButton !== undefined ? alert.showConfirmButton : true %>,
+                timer: <%= alert.timer || 5000 %>
+}).then(() => {
+
+                    let destino = "<%= ruta || '/' %>";
+
+                    if (!destino.startsWith("/")) {
+                        destino = "/" + destino;
+                    }
+
+                    window.location.href = destino;
+
+                });
+        </script>
+        <% } %>
+</body>
+
+</html>

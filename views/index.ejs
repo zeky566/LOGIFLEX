@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOGIFLEX</title>
+    <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Estilos adicionales para el hero -->
+
+</head>
+
+<body>
+    <!-- HEADER CORREGIDO -->
+    <header class="hed-1">
+        
+        <img src="/resources/log1.png" alt="LOGIFLEX Logo" class="logo">
+        <div class="frase">
+            <!-- DEBUG: login = <%= login %> -->
+            <% if (login) { %>
+                <span>Usuario <strong>
+                        <%= name %>
+                    </strong></span>
+                    
+                <a href="/logout" class="a-logout">Cerrar sesión</a>
+                <% } else { %>
+                    <span><strong>
+                            <%= name %>
+                        </strong></span>
+                    <a href="/login" class="a-login">Iniciar sesion </a>
+                    <% } %>
+        </div>
+    </header>
+
+    <!-- Hero Section con Slider CORREGIDO -->
+    <section class="hero" id="hero">
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+            <h1>Bienvenidos</h1>
+            <p>LOGIFLEX <br>
+                Dedicada a brindar servicios de transporte y logística confiables y eficientes</p>
+        </div>
+
+        <!-- Controles del slider   (< flechas>)-->
+        <div class="slider-controls">
+            <span class="prev" id="prevBtn">&#10094;</span>
+            <span class="next" id="nextBtn">&#10095;</span>
+        </div>
+    </section>
+
+    <!-- SCRIPT CORREGIDO para el slider -->
+    <script>
+        // Esperar a que el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            const hero = document.querySelector(".hero");
+            const dots = document.querySelectorAll(".dot");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+
+            // CORREGIDO: Rutas correctas para las imágenes
+            // IMPORTANTE: Asegúrate de que estas imágenes existan en tu carpeta public/
+            const images = [
+                "/resources/c1.jpg",
+                "/resources/c5.jpg",
+                "/resources/c4.jpg"
+            ];
+
+            let current = 0;
+            let intervalId;
+
+            // Función para mostrar la imagen actual
+            function mostrarImagen(index) {
+                current = index;
+                hero.style.backgroundImage = `url('${images[current]}')`;
+
+                // Actualizar dots
+                dots.forEach((dot, i) => {
+                    if (i === current) {
+                        dot.classList.add("active");
+                    } else {
+                        dot.classList.remove("active");
+                    }
+                });
+            }
+
+            // Avanzar a la siguiente imagen
+            function siguienteImagen() {
+                current = (current + 1) % images.length;
+                mostrarImagen(current);
+            }
+
+            // Retroceder a la imagen anterior
+            function anteriorImagen() {
+                current = (current - 1 + images.length) % images.length;
+                mostrarImagen(current);
+            }
+
+            // Ir a una imagen específica (por los dots)
+            function irAImagen(index) {
+                mostrarImagen(index);
+                reiniciarIntervalo();
+            }
+
+            // Reiniciar el intervalo de cambio automático
+            function reiniciarIntervalo() {
+                clearInterval(intervalId);
+                intervalId = setInterval(siguienteImagen, 5000);
+            }
+
+            // Verificar que los elementos existen antes de agregar eventos
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener("click", function () {
+                    siguienteImagen();
+                    reiniciarIntervalo();
+                });
+
+                prevBtn.addEventListener("click", function () {
+                    anteriorImagen();
+                    reiniciarIntervalo();
+                });
+            }
+
+            // Event listeners para los dots
+            if (dots.length > 0) {
+                dots.forEach((dot, index) => {
+                    dot.addEventListener("click", () => irAImagen(index));
+                });
+            }
+
+            // Pausar al hacer hover
+            if (hero) {
+                hero.addEventListener("mouseenter", () => {
+                    clearInterval(intervalId);
+                });
+
+                hero.addEventListener("mouseleave", () => {
+                    intervalId = setInterval(siguienteImagen, 5000);
+                });
+            }
+
+            // Inicializar - mostrar primera imagen
+            if (images.length > 0) {
+                mostrarImagen(0);
+                intervalId = setInterval(siguienteImagen, 5000);
+            }
+        });
+    </script>
+
+    <div class="cont1">
+        <div>
+            <img src="/resources/log1.png" alt="LOGIFLEX Logo" class="log1">
+        </div>
+        <div>
+            <p>
+                LOGIFLEX <br>
+                En LOGIFLEX transformamos la logística 
+                en una ventaja competitiva. Con más de 10
+                 años de experiencia, brindamos soluciones 
+                 de transporte y distribución adaptadas a las
+                  necesidades de cada cliente. Nuestro objetivo 
+                  es optimizar los procesos logísticos mediante eficiencia,
+                   innovación y un servicio profesional que garantice 
+                   confianza y resultados.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="parent3">
+
+        <div class="div1">
+            <h4> MISIÓN </h4>
+            <p>
+
+                Brindar inteligentes soluciones
+                y eficientes, logísticas con
+                seguridad, puntualidad y flexibilidad.
+                Optimizamos la cadena de suministro
+                de nuestros clientes con un servicio
+                confiable y de alta calidad.
+            </p>
+
+
+        </div>
+        <div class="div2">
+            <h4> VISIÓN </h4>
+            <p>
+                Ser líderes en el sector logístico,
+                reconocidos por profesionalismo
+                y innovación, adaptación.
+                Aspiramos a consolidarnos como un
+                referente nacional.
+            </p>
+        </div>
+
+
+        <div class="div3">
+            <h4> HISTORIA </h4>
+            <p>
+
+                ✔ Compromiso.
+                ✔ Innovación.
+                ✔ Confianza.
+                ✔ Flexibilidad.
+                ✔ Trabajo en equipo.
+            </p>
+        </div>
+    </div>
+<br><br> <br><br>
+    <div>
+         <img src="/resources/c7.jpg" alt="LOGIFLEX Logo" class="img2">
+    </div>
+
+    <br><br> <br><br>
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+    <section class="info">
+        <div class="info-box">
+            <h4>Desde el blog</h4>
+            <p>La mejor seguridad para tu negocio </p>
+        </div>
+
+        <div class="info-box">
+            <h4>Qué hacemos</h4>
+            <p>Impulsamos la eficiencia logística de nuestros
+                clientes mediante soluciones de transporte y
+                gestión que garantizan control, optimización
+                de recursos y crecimiento sostenible.  </p>
+        </div>
+
+        <div class="info-box">
+            <h4>CONTACTO</h4>
+            <p>México<br>+52 276 135 1234</p>
+        </div>
+    </section>
+
+</body>
+
+</html>

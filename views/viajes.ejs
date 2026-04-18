@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>segimiento de viajes </title>
+    <link rel="stylesheet" href="resources/css/style.css">
+</head>
+<body>
+ 
+     <!--            segimiento de viajes         -->     
+    <div>
+     <section id="trips" class="section-content">
+                <div class="card-header" >
+                    <h1>Seguimiento de Viajes</h1>
+                    <button class="btn" id="add-trip-btn-2"><i class="fas fa-plus"></i> Nuevo Viaje</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Todos los Viajes</h3>
+                        <div class="filters">
+                            <select id="trip-filter" class="form-control" style="width: auto; display: inline-block;">
+                                <option value="all">Todos los estados</option>
+                                <option value="planned">Planificado</option>
+                                <option value="in-progress">En curso</option>
+                                <option value="completed">Completado</option>
+                                <option value="cancelled">Cancelado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="trips-table">
+                            <thead>
+                                <tr>
+                                    <th>ID Viaje</th>
+                                    <th>Cliente</th>
+                                    <th>Tipo de Carga</th>
+                                    <th>Origen</th>
+                                    <th>Destino</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Inicio</th>
+                                    <th>Fecha Fin</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trips-body">
+                                <!-- Los datos se cargarán con JavaScript -->
+                                <tr id="no-trips">
+                                    <td colspan="9" class="empty-state">
+                                        <i class="fas fa-route"></i>
+                                        <h3>No hay viajes registrados</h3>
+                                        <p>Comience agregando su primer viaje para ver la información aquí.</p>
+                                        <button class="btn" id="add-first-trip-2">Agregar Primer Viaje</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal para agregar viaje -->
+            <div id="add-trip-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Agregar Nuevo Viaje</h2>
+                        <button class="close-modal" onclick="document.getElementById('add-trip-modal').style.display='none'">&times;</button>
+                    </div>
+                    <form id="trip-form">
+                        <div class="form-group">
+                            <label for="trip-client">Cliente *</label>
+                            <select id="trip-client" class="form-control" required>
+                                <option value="">Seleccione un cliente</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trip-type">Tipo de Carga *</label>
+                            <select id="trip-type" class="form-control" required>
+                                <option value="general">Carga General</option>
+                                <option value="perishable">Perecederos</option>
+                                <option value="dangerous">Materiales Peligrosos</option>
+                                <option value="refrigerated">Refrigerados</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trip-origin">Origen *</label>
+                            <input type="text" id="trip-origin" class="form-control" placeholder="Ciudad o punto de partida" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trip-destination">Destino *</label>
+                            <input type="text" id="trip-destination" class="form-control" placeholder="Ciudad o punto de llegada" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trip-start-date">Fecha de Inicio *</label>
+                            <input type="date" id="trip-start-date" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trip-end-date">Fecha de Fin *</label>
+                            <input type="date" id="trip-end-date" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trip-notes">Notas</label>
+                            <textarea id="trip-notes" class="form-control" rows="3" placeholder="Información adicional sobre el viaje"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn">Agregar Viaje</button>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                // Función para abrir modales
+                function openModal(modalId) {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        
+                        // Actualizar las listas desplegables antes de mostrar el modal
+                        if (modalId === 'add-trip-modal') {
+                            updateClientSelects();
+                        }
+                    }
+                }
+
+                // Variables globales
+                let trips = JSON.parse(localStorage.getItem('transportTrips')) || [];
+                let clients = JSON.parse(localStorage.getItem('transportClients')) || [];
+                let costs = JSON.parse(localStorage.getItem('transportCosts')) || [];
+                let reports = JSON.parse(localStorage.getItem('transportReports')) || [];
+
+                // Actualizar selects de clientes (lee siempre desde localStorage para obtener datos actualizados)
+                function updateClientSelects() {
+                    const tripClientSelect = document.getElementById('trip-client');
+                    if (!tripClientSelect) return;
+                    console.log('updateClientSelects: loading clients from localStorage');
+                    tripClientSelect.innerHTML = '<option value="">Seleccione un cliente</option>';
+                    const storedClients = JSON.parse(localStorage.getItem('transportClients')) || [];
+                    if (storedClients.length > 0) {
+                        storedClients.forEach(client => {
+                            if (client.status === 'active') {
+                                const option = document.createElement('option');
+                                option.value = client.id;
+                                option.textContent = `${client.name} - ${client.company || ''}`;
+                                tripClientSelect.appendChild(option);
+                            }
+                        });
+                    }
+                }
+
+                // Funciones auxiliares que faltaban
+                function updateDashboard() {
+                    // Función placeholder
+                }
+
+                function updateClientsTable() {
+                    // Función placeholder
+                }
+
+                function updateTripSelects() {
+                    // Función placeholder
+                }
+
+                function updateReportsTable() {
+                    // Función placeholder
+                }
+                
+
+                
+// Actualizar tabla de viajes
+function updateTripsTable() {
+    const tripsBody = document.getElementById('trips-body');
+    const noTripsRow = document.getElementById('no-trips');
+    
+    if (trips.length > 0) {
+        noTripsRow.style.display = 'none';
+        tripsBody.innerHTML = '';
+        
+        trips.forEach(trip => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>TRP-${trip.id.toString().padStart(3, '0')}</td>
+                <td>${trip.clientName}</td>
+                <td>${getTripTypeText(trip.type)}</td>
+                <td>${trip.origin}</td>
+                <td>${trip.destination}</td>
+                <td><span class="badge ${getStatusBadgeClass(trip.status)}">${getStatusText(trip.status)}</span></td>
+                <td>${formatDate(trip.startDate)}</td>
+                <td>${formatDate(trip.endDate)}</td>
+                <td>
+                    <button class="btn" onclick="viewTripDetails(${trip.id})" style="padding: 5px 10px; font-size: 0.8rem;">Ver</button>
+                    <button class="btn btn-warning" onclick="editTrip(${trip.id})" style="padding: 5px 10px; font-size: 0.8rem;">Editar</button>
+                    <button class="btn" onclick="deleteTrip(${trip.id})" style="background:#e74c3c;color:#fff;padding: 5px 10px; font-size: 0.8rem;margin-left:5px;">Eliminar</button>
+                </td>
+            `;
+            tripsBody.appendChild(row);
+        });
+    } else {
+        noTripsRow.style.display = '';
+        tripsBody.innerHTML = '';
+        tripsBody.appendChild(noTripsRow);
+    }
+}
+
+// Agregar nuevo viaje
+function handleAddTrip(e) {
+    e.preventDefault();
+    
+    const clientId = parseInt(document.getElementById('trip-client').value);
+    // Leer clientes desde localStorage para evitar inconsistencias entre módulos
+    const storedClients = JSON.parse(localStorage.getItem('transportClients')) || [];
+    const client = storedClients.find(c => c.id === clientId);
+    
+    if (!client) {
+        alert('Debe seleccionar un cliente válido. Si no tiene clientes, primero agregue uno.');
+        return;
+    }
+    
+    const newTrip = {
+        id: trips.length > 0 ? Math.max(...trips.map(t => t.id)) + 1 : 1,
+        clientId,
+        clientName: client ? `${client.name} - ${client.company}` : 'Cliente no especificado',
+        type: document.getElementById('trip-type').value,
+        origin: document.getElementById('trip-origin').value,
+        destination: document.getElementById('trip-destination').value,
+        status: 'planned',
+        startDate: document.getElementById('trip-start-date').value,
+        endDate: document.getElementById('trip-end-date').value,
+        notes: document.getElementById('trip-notes').value
+    };
+    
+    trips.push(newTrip);
+    localStorage.setItem('transportTrips', JSON.stringify(trips));
+    
+    // Actualizar cliente
+    if (client) {
+        client.servicesCount = (client.servicesCount || 0) + 1;
+        client.lastService = newTrip.startDate;
+        // Persistir cambios y sincronizar referencias globales
+        localStorage.setItem('transportClients', JSON.stringify(storedClients));
+        try { window.clients = storedClients; } catch(e){}
+        try { clients = storedClients; } catch(e){}
+    }
+    
+    // Cerrar modal y actualizar
+    document.getElementById('add-trip-modal').style.display = 'none';
+    document.getElementById('trip-form').reset();
+    // Actualizaciones en memoria y DOM
+    try { updateDashboard(); } catch(e) { console.warn('updateDashboard error', e); }
+
+    // Añadir la fila nueva directamente para que aparezca sin recargar
+    try { appendTripRow(newTrip); } catch (err) { console.warn('appendTripRow falló, refrescando tabla', err); updateTripsTable(); }
+
+    try { updateClientsTable(); } catch(e) { console.warn('updateClientsTable error', e); }
+    try { updateTripSelects(); } catch(e) { console.warn('updateTripSelects error', e); }
+
+    alert('Viaje agregado exitosamente.');
+}
+
+// Añade una sola fila de viaje al cuerpo de la tabla (no recarga toda la tabla)
+function appendTripRow(trip) {
+    const tripsBody = document.getElementById('trips-body');
+    if (!tripsBody) return;
+    // Ocultar estado "no trips" si existe
+    const noTripsRow = document.getElementById('no-trips');
+    if (noTripsRow) {
+        noTripsRow.style.display = 'none';
+    }
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>TRP-${trip.id.toString().padStart(3, '0')}</td>
+        <td>${trip.clientName}</td>
+        <td>${getTripTypeText(trip.type)}</td>
+        <td>${trip.origin}</td>
+        <td>${trip.destination}</td>
+        <td><span class="badge ${getStatusBadgeClass(trip.status)}">${getStatusText(trip.status)}</span></td>
+        <td>${formatDate(trip.startDate)}</td>
+        <td>${formatDate(trip.endDate)}</td>
+        <td>
+            <button class="btn" onclick="viewTripDetails(${trip.id})" style="padding: 5px 10px; font-size: 0.8rem;">Ver</button>
+            <button class="btn btn-warning" onclick="editTrip(${trip.id})" style="padding: 5px 10px; font-size: 0.8rem;">Editar</button>
+            <button class="btn" onclick="deleteTrip(${trip.id})" style="background:#e74c3c;color:#fff;padding: 5px 10px; font-size: 0.8rem;margin-left:5px;">Eliminar</button>
+        </td>
+    `;
+    tripsBody.appendChild(row);
+}
+
+// Filtrar viajes por estado
+function filterTrips() {
+    if (trips.length === 0) return;
+    
+    const filterValue = document.getElementById('trip-filter').value;
+    const rows = document.querySelectorAll('#trips-body tr');
+    
+    rows.forEach(row => {
+        if (row.id === 'no-trips') return;
+        
+        const statusCell = row.querySelector('td:nth-child(6)');
+        if (statusCell) {
+            const status = statusCell.textContent.toLowerCase();
+            const statusMap = {
+                'planificado': 'planned',
+                'en curso': 'in-progress',
+                'completado': 'completed',
+                'cancelado': 'cancelled'
+            };
+            
+            const statusKey = Object.keys(statusMap).find(key => status.includes(key));
+            const tripStatus = statusMap[statusKey] || '';
+            
+            if (filterValue === 'all' || tripStatus === filterValue) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+}
+
+// Ver detalles del viaje
+function viewTripDetails(tripId) {
+    alert(`Detalles del viaje TRP-${tripId}\nEsta funcionalidad se implementaría completamente en una aplicación real.`);
+}
+
+// Editar viaje
+function editTrip(tripId) {
+    alert(`Editar viaje TRP-${tripId}\nEsta funcionalidad se implementaría completamente en una aplicación real.`);
+}
+
+// Eliminar viaje
+function deleteTrip(tripId) {
+    if (!confirm(`¿Eliminar viaje TRP-${tripId}? Esta acción no se puede deshacer.`)) return;
+    // Normalizar ID y eliminar del arreglo (compara como Number para evitar problemas de tipo)
+    const idNum = Number(tripId);
+    trips = trips.filter(t => Number(t.id) !== idNum);
+    // Persistir cambios
+    localStorage.setItem('transportTrips', JSON.stringify(trips));
+
+    // Eliminar fila DOM si existe (caso donde appendTripRow dejó filas sin clave)
+    try {
+        const rows = document.querySelectorAll('#trips-body tr');
+        rows.forEach(r => {
+            const firstCell = r.querySelector('td');
+            if (!firstCell) return;
+            const txt = firstCell.textContent.trim(); // e.g. TRP-007
+            if (txt.startsWith('TRP-')) {
+                const rowId = txt.replace('TRP-', '').replace(/^0+/, '');
+                if (Number(rowId) === idNum) r.remove();
+            }
+        });
+    } catch (e) { /* ignore DOM removal errors */ }
+
+    // Refrescar tablas y selects relacionados
+    try { updateTripsTable(); } catch (e) { console.warn('updateTripsTable error', e); }
+    try { updateTripSelects(); } catch (e) { console.warn('updateTripSelects error', e); }
+    try { updateCostsTable(); } catch (e) { console.warn('updateCostsTable error', e); }
+    try { updateDashboard(); } catch (e) { /* ignore */ }
+
+    alert('Viaje eliminado.');
+}
+
+// Convertir tipo de viaje a texto legible
+function getTripTypeText(type) {
+    const typeMap = {
+        'general': 'Carga General',
+        'perishable': 'Perecederos',
+        'dangerous': 'Materiales Peligrosos',
+        'refrigerated': 'Refrigerados'
+    };
+    return typeMap[type] || type;
+}
+
+// Obtener clase CSS del estado
+function getStatusBadgeClass(status) {
+    const badgeMap = {
+        'planned': 'badge-warning',
+        'in-progress': 'badge-success',
+        'completed': 'badge-success',
+        'cancelled': 'badge-danger'
+    };
+    return badgeMap[status] || 'badge-warning';
+}
+
+// Convertir estado a texto legible
+function getStatusText(status) {
+    const statusMap = {
+        'planned': 'Planificado',
+        'in-progress': 'En curso',
+        'completed': 'Completado',
+        'cancelled': 'Cancelado'
+    };
+    return statusMap[status] || status;
+}
+
+// Formatear fecha
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+// Generar reporte de viajes
+function generateTripsReport() {
+    if (trips.length === 0) {
+        alert('No hay viajes para generar un reporte. Agregue al menos un viaje primero.');
+        return;
+    }
+    
+    const newReport = {
+        id: reports.length > 0 ? Math.max(...reports.map(r => r.id)) + 1 : 1,
+        type: 'trips',
+        period: 'Octubre 2023',
+        generatedAt: new Date().toISOString().split('T')[0],
+        fileUrl: '#'
+    };
+    
+    reports.push(newReport);
+    localStorage.setItem('transportReports', JSON.stringify(reports));
+    
+    updateReportsTable();
+    alert('Reporte de viajes generado exitosamente.');
+}
+
+// Inicializar eventos de viajes
+function initTripsEvents() {
+    document.getElementById('add-trip-btn-2')?.addEventListener('click', () => openModal('add-trip-modal'));
+    document.getElementById('add-first-trip-2')?.addEventListener('click', () => openModal('add-trip-modal'));
+    document.getElementById('trip-filter')?.addEventListener('change', filterTrips);
+    document.getElementById('trip-form')?.addEventListener('submit', handleAddTrip);
+    document.getElementById('generate-trips-report')?.addEventListener('click', generateTripsReport);
+}
+
+// Inicializar cuando el documento esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initTripsEvents();
+    updateTripsTable();
+    try{ updateClientSelects(); }catch(e){console.warn('updateClientSelects not found on DOMContentLoaded',e);} 
+});
+
+// Cerrar modal al hacer clic fuera de él
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('add-trip-modal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+</script>
+    </div>
+
+</body>
+</html>

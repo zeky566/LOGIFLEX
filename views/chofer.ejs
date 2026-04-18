@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <link rel="stylesheet" href="/resources/css/chofer.css">
+    <title>Panel de Chofer</title>
+</head>
+
+<body>
+
+    <header class="hed-1">
+        
+        <img src="/resources/log1.png" alt="LOGIFLEX Logo" class="logo">
+           <span style=" color: #f7f4f4;
+            margin-left: 20px;
+            font-size: 30px; ">¡Bienvenido, Chofer! <strong>
+                        <%= name %>
+                    </strong></span>
+
+    </header>
+
+    <!-- Hero Section con Slider CORREGIDO -->
+    <section class="hero" id="hero">
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+            <h1>Bienvenidos</h1>
+            <p >LOGIFLEX <br>
+                Dedicada a brindar servicios de transporte y logística confiables y eficientes</p>
+        </div>
+
+        <!-- Controles del slider   (< flechas>)-->
+        <div class="slider-controls">
+            <span class="prev" id="prevBtn">&#10094;</span>
+            <span class="next" id="nextBtn">&#10095;</span>
+        </div>
+    </section>
+
+    <!-- SCRIPT CORREGIDO para el slider -->
+    <script>
+        // Esperar a que el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function () {
+            const hero = document.querySelector(".hero");
+            const dots = document.querySelectorAll(".dot");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+
+            // CORREGIDO: Rutas correctas para las imágenes
+            // IMPORTANTE: Asegúrate de que estas imágenes existan en tu carpeta public/
+            const images = [
+                "/resources/c4.jpg",
+                "/resources/c5.jpg",
+                "/resources/c6.jpg"
+            ];
+
+            let current = 0;
+            let intervalId;
+
+            // Función para mostrar la imagen actual
+            function mostrarImagen(index) {
+                current = index;
+                hero.style.backgroundImage = `url('${images[current]}')`;
+
+                // Actualizar dots
+                dots.forEach((dot, i) => {
+                    if (i === current) {
+                        dot.classList.add("active");
+                    } else {
+                        dot.classList.remove("active");
+                    }
+                });
+            }
+
+            // Avanzar a la siguiente imagen
+            function siguienteImagen() {
+                current = (current + 1) % images.length;
+                mostrarImagen(current);
+            }
+
+            // Retroceder a la imagen anterior
+            function anteriorImagen() {
+                current = (current - 1 + images.length) % images.length;
+                mostrarImagen(current);
+            }
+
+            // Ir a una imagen específica (por los dots)
+            function irAImagen(index) {
+                mostrarImagen(index);
+                reiniciarIntervalo();
+            }
+
+            // Reiniciar el intervalo de cambio automático
+            function reiniciarIntervalo() {
+                clearInterval(intervalId);
+                intervalId = setInterval(siguienteImagen, 5000);
+            }
+
+            // Verificar que los elementos existen antes de agregar eventos
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener("click", function () {
+                    siguienteImagen();
+                    reiniciarIntervalo();
+                });
+
+                prevBtn.addEventListener("click", function () {
+                    anteriorImagen();
+                    reiniciarIntervalo();
+                });
+            }
+
+            // Event listeners para los dots
+            if (dots.length > 0) {
+                dots.forEach((dot, index) => {
+                    dot.addEventListener("click", () => irAImagen(index));
+                });
+            }
+
+            // Pausar al hacer hover
+            if (hero) {
+                hero.addEventListener("mouseenter", () => {
+                    clearInterval(intervalId);
+                });
+
+                hero.addEventListener("mouseleave", () => {
+                    intervalId = setInterval(siguienteImagen, 5000);
+                });
+            }
+
+            // Inicializar - mostrar primera imagen
+            if (images.length > 0) {
+                mostrarImagen(0);
+                intervalId = setInterval(siguienteImagen, 5000);
+            }
+        });
+    </script>
+   
+
+    <div class="chofer-container">
+
+        <!-- HEADER -->
+        <header class="chofer-header">
+
+            <div class="user-info">
+
+                <h1>Chofer</h1>
+
+                <div class="user-details">
+
+                    <p class="welcome-message">
+                        Bienvenido : <strong>
+                            <%= name || "Usuario" %>
+                        </strong>
+                    </p>
+
+                    
+                    
+
+                </div>
+
+            </div>
+             <img src="/resources/log1.png" alt="LOGIFLEX Logo" class="logo">
+
+            <a href="/logout" class="btn-logout">Cerrar Sesión</a>
+
+        </header>
+
+        <% if (feedbackMessage) { %>
+            <div class="feedback-message <%= feedbackType === 'success' ? 'success' : 'error' %>">
+                <%= feedbackMessage %>
+            </div>
+        <% } %>
+
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="chofer-content">
+
+            <div class="chofer-dashboard-layout">
+                <aside class="chofer-dashboard-sidebar" id="chofer-dashboard-sidebar">
+                    <p class="chofer-dashboard-kicker">Centro operativo</p>
+                    <h2>Chofer</h2>
+                    <p class="chofer-dashboard-copy">Consulta tus viajes, actualiza estados y registra gastos desde un solo lugar.</p>
+                    <nav class="chofer-dashboard-nav" aria-label="Módulos del chofer">
+                        <button type="button" class="chofer-dashboard-link is-active" data-panel-target="chofer-panel-resumen">Resumen</button>
+                        <button type="button" class="chofer-dashboard-link" data-panel-target="chofer-panel-viaje">Viaje activo</button>
+                        <button type="button" class="chofer-dashboard-link" data-panel-target="chofer-panel-gastos">Gastos</button>
+                        <button type="button" class="chofer-dashboard-link" data-panel-target="chofer-panel-cuenta">Cuenta</button>
+                    </nav>
+                </aside>
+
+                <section class="chofer-dashboard-main">
+                    <button type="button" class="chofer-dashboard-toggle" id="chofer-dashboard-toggle">Menú del panel</button>
+
+                    <div class="chofer-dashboard-panel is-active-panel" id="chofer-panel-resumen">
+
+            <!-- TARJETAS -->
+            <div class="summary-cards">
+
+                <div class="card">
+                    <h3>Viajes Asignados</h3>
+                    <p class="card-number"><%= stats && stats.viajesAsignados ? stats.viajesAsignados : 0 %></p>
+                    <p>Total asignados</p>
+                </div>
+
+                <div class="card">
+                    <h3>Kilometraje</h3>
+                    <p class="card-number"><%= Number((stats && stats.kilometrajeMes) || 0).toLocaleString('es-MX', { maximumFractionDigits: 0 }) %></p>
+                    <p>Kilómetros este mes</p>
+                </div>
+
+                <div class="card">
+                    <h3>Horas Conducidas</h3>
+                    <p class="card-number"><%= Number((stats && stats.horasMes) || 0).toLocaleString('es-MX', { maximumFractionDigits: 1 }) %></p>
+                    <p>Horas este mes</p>
+                </div>
+
+                <div class="card">
+                    <h3>Calificación</h3>
+                    <% 
+                        const calificacionProm = Number((stats && stats.calificacion) || 0);
+                        const estrellasLlenas = Math.max(0, Math.min(5, Math.round(calificacionProm)));
+                        const estrellasTexto = '★'.repeat(estrellasLlenas) + '☆'.repeat(5 - estrellasLlenas);
+                    %>
+                    <p class="card-number"><%= calificacionProm.toFixed(1) %></p>
+                    <p><%= estrellasTexto %></p>
+                </div>
+
+            </div>
+
+
+            <!-- TABLA DE VIAJES -->
+            <div class="section" id="chofer-actualizar-viaje">
+
+                <h2>Próximos Viajes</h2>
+
+                <div class="table-container">
+
+                    <table class="viajes-table">
+
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Origen</th>
+                                <th>Destino</th>
+                                <th>Cliente</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% if (Array.isArray(driverTrips) && driverTrips.length > 0) { %>
+                                <% driverTrips.slice(0, 12).forEach(function(viaje) { 
+                                    const estado = String(viaje.estado_viaje || '').toLowerCase();
+                                    const estadoClass = estado === 'entregado' ? 'completado' : ((estado === 'en ruta' || estado === 'en carga') ? 'confirmado' : 'pendiente');
+                                    const fechaBase = viaje.fecha_salida || viaje.created_at;
+                                    const fechaObj = fechaBase ? new Date(fechaBase) : null;
+                                    const fechaVista = fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-MX') : '-';
+                                %>
+                                    <tr data-trip-id="<%= viaje.trip_id || '' %>">
+                                        <td><%= fechaVista %></td>
+                                        <td><%= viaje.origen || '-' %></td>
+                                        <td><%= viaje.destino || '-' %></td>
+                                        <td><%= viaje.cliente || '-' %></td>
+                                        <td><span class="badge <%= estadoClass %>"><%= viaje.estado_viaje || 'programado' %></span></td>
+                                        <td><button type="button" class="btn-small js-select-trip" data-trip-id="<%= viaje.trip_id || '' %>">Viaje <%= viaje.trip_id || '-' %></button></td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6">No tienes viajes asignados por ahora.</td>
+                                </tr>
+                            <% } %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+                    </div>
+
+                    <div class="chofer-dashboard-panel" id="chofer-panel-viaje">
+
+                <!-- VIAJE ACTIVO -->
+            <div class="section" id="chofer-registrar-gastos">
+
+                <h2>Viaje en Curso</h2>
+
+                <% 
+                    const estadoActivo = String((activeTrip && activeTrip.estado_viaje) || '').toLowerCase();
+                    let progreso = 0;
+                    if (estadoActivo === 'programado') progreso = 10;
+                    if (estadoActivo === 'en carga') progreso = 35;
+                    if (estadoActivo === 'en ruta') progreso = 65;
+                    if (estadoActivo === 'entregado') progreso = 100;
+                %>
+
+                <div class="viaje-activo">
+
+                    <div class="viaje-activo-id">
+                        <span class="label">Viaje activo</span>
+                        <strong id="curso-trip-id"><%= activeTrip ? (activeTrip.trip_id || '-') : '-' %></strong>
+                    </div>
+
+                    <div class="viaje-info">
+
+                        <div class="info-item">
+                            <span class="label">Origen</span>
+                            <span class="value" id="curso-origen"><%= activeTrip ? (activeTrip.origen || '-') : '-' %></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">Destino</span>
+                            <span class="value" id="curso-destino"><%= activeTrip ? (activeTrip.destino || '-') : '-' %></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">Cliente</span>
+                            <span class="value" id="curso-cliente"><%= activeTrip ? (activeTrip.cliente || '-') : '-' %></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">Hora salida</span>
+                            <span class="value" id="curso-hora-salida"><%= activeTrip ? (activeTrip.hora_salida || '-') : '-' %></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">Hora estimada llegada</span>
+                            <span class="value" id="curso-hora-llegada"><%= activeTrip ? (activeTrip.hora_llegada || '-') : '-' %></span>
+                        </div>
+
+                        <div class="info-item">
+                            <span class="label">Progreso</span>
+
+                            <div class="progress-bar">
+                                <div class="progress" id="curso-progress" data-progress="<%= progreso %>"><%= progreso %>%</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="viaje-acciones">
+                        <button type="button" class="btn-primary" id="btn-iniciar-viaje">Iniciar Viaje</button>
+                        <button type="button" class="btn-secondary" id="btn-reportar-incidente">Reportar Incidente</button>
+                        <button type="button" class="btn-success" id="btn-finalizar-viaje">Finalizar Viaje</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section" id="chofer-actualizacion-admin">
+
+                <h2>Actualizar viaje para administración</h2>
+                <p class="trip-update-helper">Abre el formulario para reportar estado, tiempos, ubicación e incidencias del viaje.</p>
+                <button type="button" class="btn-primary" id="open-trip-update-modal">Actualizar viaje</button>
+
+                <div class="trip-update-modal" id="trip-update-modal" aria-hidden="true">
+                    <div class="trip-update-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="trip-update-modal-title">
+                        <div class="trip-update-modal-header">
+                            <h3 id="trip-update-modal-title">Actualizar viaje para administración</h3>
+                            <button type="button" class="trip-update-modal-close" data-trip-modal-close aria-label="Cerrar formulario">X</button>
+                        </div>
+
+                        <div class="gastos-form">
+
+                            <form action="/chofer/actualizar-viaje" method="POST" id="chofer-update-form">
+
+                                <div class="trip-update-grid">
+                                    <select name="trip_id" class="form-control" id="trip-update-id" required>
+                                        <option value="">Selecciona viaje</option>
+                                        <% if (Array.isArray(driverTrips) && driverTrips.length > 0) { %>
+                                            <% driverTrips.forEach(function(viaje) { %>
+                                                <option value="<%= viaje.trip_id %>" <%= activeTrip && activeTrip.trip_id === viaje.trip_id ? 'selected' : '' %>>
+                                                    <%= viaje.trip_id %> - <%= viaje.origen || '-' %> a <%= viaje.destino || '-' %>
+                                                </option>
+                                            <% }) %>
+                                        <% } %>
+                                    </select>
+
+                                    <select name="estado_viaje" class="form-control" id="trip-update-estado" required>
+                                        <option value="programado">Programado</option>
+                                        <option value="en carga">En carga</option>
+                                        <option value="en ruta">En ruta</option>
+                                        <option value="entregado">Entregado</option>
+                                        <option value="cancelado">Cancelado</option>
+                                    </select>
+
+                                    <input type="time" name="hora_salida" id="trip-update-hora-salida" class="form-control" placeholder="Hora de salida">
+                                    <input type="time" name="hora_llegada" id="trip-update-hora-llegada" class="form-control" placeholder="Hora de llegada">
+
+                                    <input type="text" name="ubicacion_actual" id="trip-update-ubicacion" class="form-control" placeholder="Ubicación actual">
+                                    <input type="text" name="paradas" id="trip-update-paradas" class="form-control" placeholder="Paradas">
+
+                                    <input type="number" name="combustible" id="trip-update-combustible" class="form-control" step="0.01" min="0" placeholder="Combustible">
+                                    <input type="number" name="peajes" id="trip-update-peajes" class="form-control" step="0.01" min="0" placeholder="Peajes">
+                                    <input type="number" name="viaticos" id="trip-update-viaticos" class="form-control" step="0.01" min="0" placeholder="Viáticos">
+
+                                    <input type="text" name="incidentes" id="trip-update-incidentes" class="form-control full" placeholder="Incidentes">
+                                    <input type="text" name="observaciones" id="trip-update-observaciones" class="form-control full" placeholder="Observaciones">
+                                </div>
+                                <br>
+
+                                <div class="trip-update-modal-actions">
+                                    <button type="submit" class="btn-primary">Guardar actualización</button>
+                                    <button type="button" class="btn-secondary" data-trip-modal-close>Cerrar</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+                    </div>
+
+                    <div class="chofer-dashboard-panel" id="chofer-panel-gastos">
+
+                <div class="section" id="chofer-gastos-recientes">
+                <h2>Gastos Recientes</h2>
+
+                <div class="table-container">
+                    <table class="viajes-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (Array.isArray(driverExpenses) && driverExpenses.length > 0) { %>
+                                <% driverExpenses.forEach(function(gasto) { 
+                                    const fechaBase = gasto.fecha || gasto.created_at;
+                                    const fechaObj = fechaBase ? new Date(fechaBase) : null;
+                                    const fechaVista = fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-MX') : '-';
+                                %>
+                                    <tr>
+                                        <td><%= fechaVista %></td>
+                                        <td><%= gasto.tipo_gasto || '-' %></td>
+                                        <td>$<%= Number(gasto.monto || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></td>
+                                        <td><%= gasto.descripcion || '-' %></td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4">Aún no has registrado gastos.</td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- REGISTRAR GASTOS -->
+            <div class="section" id="chofer-registrar-gasto-form">
+
+                <h2>Registrar Gastos</h2>
+
+                <div class="gastos-form">
+
+                    <form action="/registrar-gasto" method="POST" class="form-inline">
+
+                        <select name="tipo_gasto" class="form-control" required>
+                            <option value="">Seleccionar tipo</option>
+                            <option value="combustible">Combustible</option>
+                            <option value="peaje">Peaje</option>
+                            <option value="comida">Gastos operativos</option>
+                            <option value="mantenimiento">Mantenimiento</option>
+                            <option value="otros">Otros</option>
+                        </select>
+
+                        <input type="number" name="monto" placeholder="Monto" class="form-control" step="0.01" required>
+
+                        <input type="text" name="descripcion" placeholder="Descripción" class="form-control" required>
+
+                        <button type="submit" class="btn-primary">Registrar Gasto</button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- MENSAJE DE BIENVENIDA -->
+                    </div>
+
+                    <div class="chofer-dashboard-panel" id="chofer-panel-cuenta">
+
+                <div class="welcome-section">
+
+                <h2>¡Buen viaje, <%= name || "Chofer" %>!</h2>
+
+                <p>Has iniciado sesión como Chofer del sistema.</p>
+
+                <p>
+                    Fecha de hoy:
+                    <%= new Date().toLocaleDateString("es-MX") %>
+                </p>
+
+                <p>
+                    Recuerda registrar todos tus gastos y mantener actualizado el estado de tus viajes.
+                </p>
+
+            </div>
+
+                    </div>
+                </section>
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script id="driver-trips-data" type="application/json"><%- JSON.stringify(Array.isArray(driverTrips) ? driverTrips : []) %></script>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            initChoferDashboard();
+            console.log("Bienvenido Chofer: <%= name || 'Usuario' %>");
+
+            const feedback = document.querySelector('.feedback-message');
+            if (feedback) {
+                setTimeout(() => {
+                    feedback.classList.add('hide');
+                    setTimeout(() => feedback.remove(), 360);
+                }, 3500);
+            }
+
+            document.querySelectorAll('.progress[data-progress]').forEach((node) => {
+                const value = Number(node.getAttribute('data-progress') || 0);
+                const safeValue = Number.isFinite(value) ? Math.max(0, Math.min(100, value)) : 0;
+                node.style.width = safeValue + '%';
+            });
+
+            const driverTripsDataNode = document.getElementById('driver-trips-data');
+            const driverTrips = (() => {
+                if (!driverTripsDataNode) return [];
+                try {
+                    const parsed = JSON.parse(driverTripsDataNode.textContent || '[]');
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (error) {
+                    return [];
+                }
+            })();
+            const activeTripId = '<%= activeTrip && activeTrip.trip_id ? activeTrip.trip_id : "" %>';
+
+            function safeText(value) {
+                if (value === null || value === undefined || String(value).trim() === '') return '-';
+                return String(value).trim();
+            }
+
+            function getProgressByStatus(status) {
+                const estado = String(status || '').trim().toLowerCase();
+                if (estado === 'programado') return 10;
+                if (estado === 'en carga') return 35;
+                if (estado === 'en ruta') return 65;
+                if (estado === 'entregado') return 100;
+                return 0;
+            }
+
+            const cursoOrigen = document.getElementById('curso-origen');
+            const cursoDestino = document.getElementById('curso-destino');
+            const cursoCliente = document.getElementById('curso-cliente');
+            const cursoHoraSalida = document.getElementById('curso-hora-salida');
+            const cursoHoraLlegada = document.getElementById('curso-hora-llegada');
+            const cursoProgress = document.getElementById('curso-progress');
+            const cursoTripId = document.getElementById('curso-trip-id');
+
+            const updateForm = document.getElementById('chofer-update-form');
+            const tripSelect = document.getElementById('trip-update-id');
+            const estadoSelect = document.getElementById('trip-update-estado');
+            const horaSalidaInput = document.getElementById('trip-update-hora-salida');
+            const horaLlegadaInput = document.getElementById('trip-update-hora-llegada');
+            const ubicacionInput = document.getElementById('trip-update-ubicacion');
+            const paradasInput = document.getElementById('trip-update-paradas');
+            const combustibleInput = document.getElementById('trip-update-combustible');
+            const peajesInput = document.getElementById('trip-update-peajes');
+            const viaticosInput = document.getElementById('trip-update-viaticos');
+            const incidentesInput = document.getElementById('trip-update-incidentes');
+            const observacionesInput = document.getElementById('trip-update-observaciones');
+            const tripUpdateModal = document.getElementById('trip-update-modal');
+            const openTripUpdateModalButton = document.getElementById('open-trip-update-modal');
+
+            function showTripUpdateModal() {
+                if (!tripUpdateModal) return;
+                tripUpdateModal.classList.add('is-open');
+                tripUpdateModal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-is-open');
+            }
+
+            function hideTripUpdateModal() {
+                if (!tripUpdateModal) return;
+                tripUpdateModal.classList.remove('is-open');
+                tripUpdateModal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-is-open');
+            }
+
+            if (openTripUpdateModalButton) {
+                openTripUpdateModalButton.addEventListener('click', () => {
+                    showTripUpdateModal();
+                });
+            }
+
+            if (tripUpdateModal) {
+                tripUpdateModal.querySelectorAll('[data-trip-modal-close]').forEach((button) => {
+                    button.addEventListener('click', hideTripUpdateModal);
+                });
+
+                tripUpdateModal.addEventListener('click', (event) => {
+                    if (event.target === tripUpdateModal) hideTripUpdateModal();
+                });
+            }
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && tripUpdateModal && tripUpdateModal.classList.contains('is-open')) {
+                    hideTripUpdateModal();
+                }
+            });
+
+            function findTripById(tripId) {
+                const id = String(tripId || '').trim();
+                if (!id) return null;
+                return driverTrips.find(t => String(t.trip_id || '').trim() === id) || null;
+            }
+
+            function fillActiveTripCard(trip) {
+                if (cursoTripId) cursoTripId.textContent = safeText(trip && trip.trip_id);
+                if (cursoOrigen) cursoOrigen.textContent = safeText(trip && trip.origen);
+                if (cursoDestino) cursoDestino.textContent = safeText(trip && trip.destino);
+                if (cursoCliente) cursoCliente.textContent = safeText(trip && trip.cliente);
+                if (cursoHoraSalida) cursoHoraSalida.textContent = safeText(trip && trip.hora_salida);
+                if (cursoHoraLlegada) cursoHoraLlegada.textContent = safeText(trip && trip.hora_llegada);
+
+                if (cursoProgress) {
+                    const progress = getProgressByStatus(trip && trip.estado_viaje);
+                    cursoProgress.setAttribute('data-progress', String(progress));
+                    cursoProgress.textContent = `${progress}%`;
+                    cursoProgress.style.width = `${progress}%`;
+                }
+            }
+
+            function fillUpdateForm(trip) {
+                if (!trip || !tripSelect) return;
+                tripSelect.value = String(trip.trip_id || '');
+                if (estadoSelect) estadoSelect.value = String(trip.estado_viaje || 'programado').toLowerCase();
+                if (horaSalidaInput) horaSalidaInput.value = String(trip.hora_salida || '').trim();
+                if (horaLlegadaInput) horaLlegadaInput.value = String(trip.hora_llegada || '').trim();
+                if (ubicacionInput) ubicacionInput.value = String(trip.ubicacion_actual || '').trim();
+                if (paradasInput) paradasInput.value = String(trip.paradas || '').trim();
+                if (combustibleInput) combustibleInput.value = trip.combustible === null || trip.combustible === undefined ? '' : String(trip.combustible);
+                if (peajesInput) peajesInput.value = trip.peajes === null || trip.peajes === undefined ? '' : String(trip.peajes);
+                if (viaticosInput) viaticosInput.value = trip.viaticos === null || trip.viaticos === undefined ? '' : String(trip.viaticos);
+                if (incidentesInput) incidentesInput.value = String(trip.incidentes || '').trim();
+                if (observacionesInput) observacionesInput.value = String(trip.observaciones || '').trim();
+            }
+
+            function selectTrip(tripId) {
+                const trip = findTripById(tripId);
+                fillActiveTripCard(trip);
+                if (trip) fillUpdateForm(trip);
+
+                document.querySelectorAll('tr[data-trip-id]').forEach((row) => {
+                    row.classList.remove('selected-trip-row');
+                    const rowTripId = String(row.getAttribute('data-trip-id') || '').trim();
+                    if (trip && rowTripId === String(trip.trip_id || '').trim()) {
+                        row.classList.add('selected-trip-row');
+                    }
+                });
+            }
+
+            function initChoferDashboard() {
+                const sidebar = document.getElementById('chofer-dashboard-sidebar');
+                const toggle = document.getElementById('chofer-dashboard-toggle');
+                const links = Array.from(document.querySelectorAll('.chofer-dashboard-link[data-panel-target]'));
+                const panels = Array.from(document.querySelectorAll('.chofer-dashboard-panel'));
+
+                if (!links.length || !panels.length) return;
+
+                function showPanel(panelId) {
+                    panels.forEach((panel) => {
+                        panel.classList.toggle('is-active-panel', panel.id === panelId);
+                    });
+
+                    links.forEach((link) => {
+                        const isActive = link.dataset.panelTarget === panelId;
+                        link.classList.toggle('is-active', isActive);
+                        link.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                    });
+
+                    if (sidebar) sidebar.classList.remove('is-open');
+                }
+
+                links.forEach((link) => {
+                    link.addEventListener('click', () => {
+                        showPanel(link.dataset.panelTarget || 'chofer-panel-resumen');
+                    });
+                });
+
+                if (toggle && sidebar) {
+                    toggle.addEventListener('click', () => {
+                        sidebar.classList.toggle('is-open');
+                    });
+                }
+
+                window.showChoferDashboardPanel = showPanel;
+            }
+
+            if (tripSelect) {
+                tripSelect.addEventListener('change', function () {
+                    selectTrip(this.value);
+                });
+            }
+
+            document.querySelectorAll('.js-select-trip[data-trip-id]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const tripId = btn.getAttribute('data-trip-id');
+                    if (tripSelect) tripSelect.value = String(tripId || '');
+                    selectTrip(tripId);
+                    if (typeof window.showChoferDashboardPanel === 'function') {
+                        window.showChoferDashboardPanel('chofer-panel-viaje');
+                    }
+                    showTripUpdateModal();
+                    const section = document.getElementById('chofer-registrar-gastos');
+                    if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
+
+            const btnIniciar = document.getElementById('btn-iniciar-viaje');
+            const btnIncidente = document.getElementById('btn-reportar-incidente');
+            const btnFinalizar = document.getElementById('btn-finalizar-viaje');
+
+            if (btnIniciar) {
+                btnIniciar.addEventListener('click', () => {
+                    if (!tripSelect || !tripSelect.value) {
+                        alert('Selecciona un viaje antes de iniciar.');
+                        return;
+                    }
+                    if (estadoSelect) estadoSelect.value = 'en ruta';
+                    if (updateForm) updateForm.submit();
+                });
+            }
+
+            if (btnIncidente) {
+                btnIncidente.addEventListener('click', () => {
+                    if (!tripSelect || !tripSelect.value) {
+                        alert('Selecciona un viaje para reportar incidente.');
+                        return;
+                    }
+                    showTripUpdateModal();
+                    if (incidentesInput) {
+                        incidentesInput.focus();
+                        incidentesInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            }
+
+            if (btnFinalizar) {
+                btnFinalizar.addEventListener('click', () => {
+                    if (!tripSelect || !tripSelect.value) {
+                        alert('Selecciona un viaje antes de finalizar.');
+                        return;
+                    }
+                    const ok = confirm('¿Deseas marcar este viaje como entregado?');
+                    if (!ok) return;
+                    if (estadoSelect) estadoSelect.value = 'entregado';
+                    if (updateForm) updateForm.submit();
+                });
+            }
+
+            selectTrip(activeTripId || (tripSelect ? tripSelect.value : ''));
+
+        });
+
+    </script>
+
+
+    <section class="info">
+        <div class="info-box">
+            <h4>Desde el blog</h4>
+            <p>La mejor seguridad para tu negocio </p>
+        </div>
+
+        <div class="info-box">
+            <h4>Qué hacemos</h4>
+            <p>Impulsamos la eficiencia logística de nuestros
+                 clientes mediante soluciones de transporte y 
+                 gestión que garantizan control, optimización 
+                 de recursos y crecimiento sostenible.</p>
+        </div>
+
+        <div class="info-box">
+            <h4>CONTACTO</h4>
+            <p>México<br>+52 276 135 1234</p>
+        </div>
+    </section>
+
+
+</body>
+
+</html>

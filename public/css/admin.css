@@ -1,0 +1,1234 @@
+
+        /* Layout general del panel administrador */
+        .admin-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 12px;
+        }
+
+        /* Encabezado del panel con usuario y logout */
+        .admin-header {  /* encabezado del panel administrador */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+        }
+
+        .user-info h1 { /* nombre del usuario */
+            margin: 0 0 10px 0;
+            font-size: 34px;
+            color: #fffdfd;
+        }
+
+        .user-details { /* detalles del usuario */
+            font-size: 26px;
+            
+        }
+
+        .welcome-message { /* mensaje de bienvenida */
+            margin: 5px 0;
+            
+        }
+
+        .user-role { /* rol del usuario */
+            margin: 5px 0;
+        }
+
+        .role-badge { /* badge de rol de usuario */
+            background-color: #090270;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .btn-logout {        /* boton cerrarsesion */
+            background-color: #0c0c0c;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color .3s;
+            filter: drop-shadow(0 0 5px #fff);
+            
+        }
+
+        .btn-logout:hover {
+            background-color: #004D61;
+        }
+
+
+
+
+        
+        /* Grid principal de tarjetas de modulos */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .admin-dashboard-layout {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .admin-dashboard-sidebar {
+            flex: 0 0 270px;
+            width: 270px;
+            position: sticky;
+            top: 16px;
+            background: linear-gradient(180deg, #042c38 0%, #071015 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 18px;
+            color: #f8fafc;
+            box-shadow: 0 12px 32px rgba(2, 6, 23, 0.22);
+        }
+
+        .admin-dashboard-kicker {
+            margin: 0 0 8px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #7dd3fc;
+        }
+
+        .admin-dashboard-sidebar h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #f8fafc;
+        }
+
+        .admin-dashboard-copy {
+            margin: 10px 0 18px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .admin-dashboard-nav {
+            display: grid;
+            gap: 10px;
+        }
+
+        .admin-nav-group {
+            display: grid;
+            gap: 6px;
+        }
+
+        .admin-dashboard-link,
+        .admin-dashboard-toggle {
+            border: 1px solid rgba(125, 211, 252, 0.25);
+            background: rgba(15, 23, 42, 0.55);
+            color: #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .admin-dashboard-link.is-active,
+        .admin-dashboard-link:hover,
+        .admin-dashboard-toggle:hover {
+            background: linear-gradient(135deg, #0f766e 0%, #164e63 100%);
+            color: #f8fafc;
+        }
+
+        .admin-dashboard-submenu {
+            display: none;
+            padding-left: 10px;
+            gap: 6px;
+        }
+
+        .admin-nav-group.is-open .admin-dashboard-submenu {
+            display: grid;
+        }
+
+        .admin-dashboard-submenu-link {
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            background: rgba(2, 6, 23, 0.52);
+            color: #cbd5e1;
+            border-radius: 9px;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .admin-dashboard-submenu-link:hover {
+            background: rgba(15, 118, 110, 0.24);
+            color: #f8fafc;
+            border-color: rgba(56, 189, 248, 0.42);
+        }
+
+        .admin-dashboard-main {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .admin-dashboard-toggle {
+            display: none;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .admin-dashboard-panel {
+            display: none;
+        }
+
+        .admin-dashboard-panel.is-active-panel {
+            display: block;
+        }
+
+        .admin-stats-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .admin-stat-card {
+            background: linear-gradient(145deg, #021a21 0%, #0a4151 100%);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 10px 24px rgba(2, 6, 23, 0.18);
+        }
+
+        .admin-stat-label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #bae6fd;
+            margin-bottom: 8px;
+        }
+
+        .admin-stat-value {
+            font-size: 30px;
+            line-height: 1;
+        }
+
+        /* Estilo base para cada tarjeta */
+        .card {
+            background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            padding: 14px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+            border: 1px solid #ddd;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #f3efef;
+            font-size: 38px;
+        }
+
+        .users-overview-card {      /* Estilo base para tarjeta de usuarios */
+            grid-column: 1 / -1;
+            color: rgb(248, 247, 250);
+        
+        }
+
+        .vehicles-overview-card {  /* Estilo base para tarjeta de vehículos */
+            grid-column: 1 / -1;
+            color: rgb(247, 242, 242);
+        }
+
+        .trips-overview-card {
+            grid-column: 1 / -1;
+            color: rgb(252, 249, 249);
+        }
+
+        /* Tablas de usuarios (clientes y choferes) */
+        .users-overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            
+        }
+
+        /* Filtros y resumen del modulo de vehiculos */
+        .vehicle-filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 8px;
+            margin: 8px 0;
+            
+        }
+
+        .vehicle-filters label { /* etiqueta de filtro de vehiculo */
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: #636262;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .vehicle-filters select {  /* select de filtro de vehiculo */           
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 6px 8px;
+            background: #929191;
+        }
+
+        .vehicle-table-wrap {  /* contenedor de tabla de vehiculos con scroll */
+            margin-top: 2px;
+            max-height: 220px;
+            
+        }
+
+        .vehicle-empty {  /* mensaje de tabla vacia en vehiculos */
+            margin: 6px 0;
+            padding: 8px 10px;
+            background: #004D61;
+            border: 1px solid #edecf5;
+            border-radius: 8px;
+            color: #f5f0f0;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* Paneles de detalle por seccion de vehiculo */
+        .vehicle-detail-panels {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 8px;
+        }
+
+        .vehicle-panel {  /* panel individual de detalle de vehiculo */
+            background: #080808;
+            border: 1px solid #e6e6e6;
+            border-radius: 8px;
+            padding: 9px;
+        }
+
+        .vehicle-panel h4 {  /* titulo de panel de detalle de vehiculo */
+            margin: 0 0 6px;
+            color: #fcfcfc;
+            font-size: 15px;
+        }
+
+        /* Encabezado de panel + boton Ver PDF */
+        .vehicle-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .vehicle-panel-head h4 {  /* titulo de encabezado de panel de detalle de vehiculo */
+            margin: 0;
+        }
+
+        /* Botones PDF de vehiculos y viajes */
+        .vehicle-pdf-btn { /* estilo base para botones PDF de vehiculos */
+            border: 1px solid #0f4f72;
+            background: #0f6fa0;
+            color: #fff;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .vehicle-pdf-btn:hover {  /* estilo al pasar el cursor sobre el boton PDF de vehiculos */
+            background: #0c5d87;
+        }
+
+        .vehicle-inline-data {
+            display: none;
+        }
+
+        /* Boton PDF del modulo viajes */
+        .trip-pdf-btn {  /* estilo base para botones PDF de viajes */
+            border: 1px solid #004D61;
+            background: #016c86;
+            color: #fdfbfb;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .trip-pdf-btn:hover {  /* estilo al pasar el cursor sobre el boton PDF de viajes */
+            background: hsl(180, 9%, 98%);
+        }
+
+        .trip-inline-data {     
+            display: none;
+        }
+
+        .vehicle-grid {
+            display: grid;
+            gap: 5px;
+        }
+
+        .vehicle-grid p {    /* Estilo de texto dentro de la cuadrícula de vehículos */
+            margin: 0;
+            color: #fdfcfc;
+            line-height: 1.25;
+            font-size: 13px;
+        }
+
+        /* Navegacion y filtros del modulo viajes */
+        .trips-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 6px 0 8px;
+        }
+
+        .trips-nav a {     /* estilo de los enlaces de navegación del modulo viajes */
+            text-decoration: none;
+            color: #080808;
+            background: #faf8f7;
+            border: 1px solid #c9e1f1;
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .trip-section {  /* sección de viajes */
+            margin-top: 8px;
+        }
+
+        .trip-filters {  /* filtros de viajes */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .trip-filters label {  /* etiqueta de filtro de viajes */
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .trip-filters select {   /* select de filtro de viajes */
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 6px 8px;
+            background: #fff;
+        }
+
+        .trip-assignment-box {
+            margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.22);
+        }
+
+        .trip-assignment-box h5 {
+            margin: 0 0 8px;
+            color: #f8fafc;
+            font-size: 14px;
+        }
+
+        .trip-assignment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 8px;
+        }
+
+        .trip-assignment-grid label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .trip-assignment-grid select {
+            border: 1px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 6px 8px;
+            background: #fff;
+        }
+
+        .trip-assignment-actions {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .assign-feedback {
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .trip-panels-grid {   /* cuadrícula de paneles de viajes */
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 8px;
+        }
+
+        .trip-status-legend {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        /* Chips de estado del viaje */
+        .trip-chip {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid #d7d7d7;
+            background: #fcf8f8;
+            color: #333;
+        }
+
+        .status-programado {   /* estado programado */
+            background: #ffe6db;
+            color: #7f5f01;
+            border-color: #f4d35e;
+        }
+
+        .status-carga {   /* estado en carga */
+            background: #ffe8d6;
+            color: #9c3f00;
+            border-color: #ffb687;
+        }
+
+        .status-ruta {   /* estado en ruta */
+            background: #ddeeff;
+            color: #0f4c81;
+            border-color: #91c2ff;
+        }
+
+        .status-entregado {   /* estado entregado */
+            background: #dcfce7;
+            color: #166534;
+            border-color: #86efac;
+        }
+
+        .status-cancelado {   /* estado cancelado */
+            background: #ffe4e6;
+            color: #9f1239;
+            border-color: #fda4af;
+        }
+
+        /* Bloque de acciones para excel (descargar/subir) */
+        .excel-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 6px 0;
+        }
+
+        .btn-excel-link,
+        .btn-excel-upload {   /* estilo base para botones de excel */
+            background-color: #0f6b2f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-excel-link:hover,
+        .btn-excel-upload:hover {   /* estilo al pasar el cursor sobre los botones de excel */
+            background-color: #0b4f23;
+        }
+
+        .excel-import-form {  /* formulario de importación de excel */
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .excel-help {  /* texto de ayuda para la importación de excel */
+            margin: 0 0 6px;
+            color: #f8f7f7;
+            font-size: 12px;
+        }
+
+        #users-inline-feedback[hidden] {
+            display: none;
+        }
+
+        body.users-modal-open {
+            overflow: hidden;
+        }
+
+        .users-inline-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            place-items: center;
+            padding: 20px;
+        }
+
+        .users-inline-modal.is-open {
+            display: grid;
+        }
+
+        .users-inline-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.68);
+        }
+
+        .users-inline-modal-dialog {
+            position: relative;
+            width: min(720px, 100%);
+            max-height: calc(100vh - 40px);
+            overflow: auto;
+            border-radius: 20px;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%);
+            box-shadow: 0 28px 60px rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+        }
+
+        .users-inline-modal-dialog.role-cliente {
+            border-color: rgba(14, 116, 144, 0.48);
+            box-shadow: 0 28px 60px rgba(8, 112, 157, 0.26);
+        }
+
+        .users-inline-modal-dialog.role-chofer {
+            border-color: rgba(22, 101, 52, 0.48);
+            box-shadow: 0 28px 60px rgba(22, 101, 52, 0.24);
+        }
+
+        .users-inline-modal-dialog.role-admin {
+            border-color: rgba(30, 64, 175, 0.48);
+            box-shadow: 0 28px 60px rgba(30, 64, 175, 0.24);
+        }
+
+        .vehicles-inline-modal-dialog {
+            width: min(760px, 100%);
+        }
+
+        .trips-download-modal-dialog {
+            width: min(760px, 100%);
+        }
+
+        .trips-download-info-copy {
+            margin: 0;
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .trips-download-info-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #334155;
+            display: grid;
+            gap: 8px;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .users-inline-modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .users-inline-subform-kicker {
+            margin: 0 0 4px;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .users-inline-modal h4 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 24px;
+        }
+
+        .users-inline-modal-form {
+            padding: 20px 24px 24px;
+        }
+
+        .users-inline-create-form.is-cliente .users-inline-modal-section {
+            border-color: rgba(14, 116, 144, 0.35);
+            background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+        }
+
+        .users-inline-create-form.is-chofer .users-inline-modal-section {
+            border-color: rgba(22, 101, 52, 0.35);
+            background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+        }
+
+        .users-inline-create-form.is-admin .users-inline-modal-section {
+            border-color: rgba(30, 64, 175, 0.35);
+            background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
+        }
+
+        .users-inline-modal-section {
+            margin-bottom: 18px;
+            padding: 16px;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid rgba(203, 213, 225, 0.9);
+        }
+
+        .users-inline-section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .users-inline-section-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            color: #334155;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .users-inline-role-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%);
+            color: #f8fafc;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .users-inline-subform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            align-items: end;
+        }
+
+        .users-inline-subform-grid-contact {
+            grid-template-columns: minmax(220px, 1fr);
+            max-width: 320px;
+        }
+
+        .users-inline-subform-grid label {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .users-inline-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .users-inline-subform-close {
+            border: none;
+            background: transparent;
+            color: #64748b;
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            font-size: 28px;
+            line-height: 1;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .users-inline-subform-close:hover {
+            background: rgba(226, 232, 240, 0.9);
+            color: #0f172a;
+        }
+
+        .users-inline-secondary {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .users-inline-secondary:hover {
+            background: #f8fafc;
+        }
+
+        @media (max-width: 640px) {
+            .users-inline-modal {
+                padding: 12px;
+            }
+
+            .users-inline-modal-dialog {
+                width: 100%;
+                max-height: calc(100vh - 24px);
+                border-radius: 16px;
+            }
+
+            .users-inline-modal-head,
+            .users-inline-modal-form {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .users-inline-modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .users-inline-modal-actions button {
+                width: 100%;
+            }
+        }
+
+        /* Mensajes de feedback de importacion/exportacion */
+        .excel-message {
+            border-radius: 8px;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .excel-success {  /* mensaje de éxito para importación/exportación de excel */
+            background: #d8f3dc;
+            color: #1b5e20;
+            border: 1px solid #95d5b2;
+        }
+
+        .excel-error {  /* mensaje de error para importación/exportación de excel */
+            background: #fde2e4;
+            color: #9d0208;
+            border: 1px solid #ffb3c1;
+        }
+
+        .users-group h4 {  /* título de grupo de usuarios (clientes/choferes) */
+            margin: 0 0 6px;
+            color: #111;
+            font-size: 14px;
+        }
+
+        .users-group-cliente h4 {
+            color: #e0f2fe !important;
+        }
+
+        .users-group-chofer h4 {
+            color: #dcfce7 !important;
+        }
+
+        .users-group-admin h4 {
+            color: #dbeafe !important;
+        }
+
+        .users-group-cliente .users-table-wrap {
+            border-color: #38bdf8;
+        }
+
+        .users-group-chofer .users-table-wrap {
+            border-color: #4ade80;
+        }
+
+        .users-group-admin .users-table-wrap {
+            border-color: #60a5fa;
+        }
+
+        .users-role-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .users-role-tab {
+            border: 1px solid #2f8cc7;
+            background: #0d3f5c;
+            color: #f8fafc;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .users-role-tab.is-active {
+            background: #1f7ab2;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18) inset;
+        }
+
+        .users-overview-single {
+            display: block;
+        }
+
+        .users-role-panel {
+            display: none;
+        }
+
+        .users-role-panel.is-visible {
+            display: block;
+        }
+
+        .users-group {
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 12px;
+            padding: 10px;
+            background: rgba(2, 23, 34, 0.72);
+            box-shadow: 0 10px 24px rgba(2, 6, 23, 0.16);
+            min-width: 0;
+        }
+
+        /* Tablas genericas del panel admin */
+        .users-table-wrap {
+            max-height: 220px;
+            overflow: auto;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            background: #f8f6f6;
+        }
+
+        .users-table {    /* tabla de usuarios */
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .users-table th,
+        .users-table td {  /* celdas de la tabla de usuarios */
+            padding: 6px 8px;
+            border-bottom: 1px solid #ececec;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .users-table th { /* encabezados de la tabla de usuarios */
+            background: #0d0d0e;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            color: #f8f7f7;
+        }
+
+        .users-inline-input {
+            width: 100%;
+            min-width: 110px;
+            border: 1px solid #9ca3af;
+            border-radius: 6px;
+            padding: 7px 8px;
+            font-size: 13px;
+            background: #ffffff;
+            color: #111827;
+            box-sizing: border-box;
+        }
+
+        .users-inline-input:focus {
+            outline: none;
+            border-color: #0f766e;
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.18);
+        }
+
+        .users-row-delete {
+            border: 1px solid #991b1b;
+            background: #b91c1c;
+            color: #fff;
+            border-radius: 6px;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .users-row-delete:hover {
+            background: #991b1b;
+        }
+
+        .users-edit-row.is-pending-delete {
+            background: #fee2e2;
+        }
+
+        .users-edit-row.is-pending-delete .users-inline-input {
+            text-decoration: line-through;
+            background: #fecaca;
+        }
+
+        .vehicle-edit-row.is-pending-delete {
+            background: #fee2e2;
+        }
+
+        .vehicle-edit-row.is-pending-delete .users-inline-input {
+            text-decoration: line-through;
+            background: #fecaca;
+        }
+
+        /* Resaltado de fila seleccionada en resumenes */
+        #vehicles-summary-table .selected-vehicle-row {
+            background: #fcfaf9;
+        }
+
+        #trips-summary-table .selected-trip-row {  /* fila seleccionada en resumen de viajes */
+            background: #4b5457;
+        }
+
+   
+        /* Caja final de bienvenida y fecha */
+        .welcome-section {  /* sección de bienvenida */
+            background: #000000;
+            color: #f5f5f5;
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .welcome-section h2 {  /* título de la sección de bienvenida */
+            color: #1976d2;
+            margin-top: 0;
+        }
+        
+
+        .logo{
+            filter: drop-shadow(0 0 1px #fff);
+        }
+
+        @media (max-width: 900px) {
+            .admin-dashboard-layout {
+                display: block;
+            }
+
+            .admin-dashboard-sidebar {
+                display: none;
+                position: static;
+            }
+
+            .admin-dashboard-sidebar.is-open {
+                display: block;
+            }
+
+            .admin-dashboard-toggle {
+                display: block;
+            }
+        }
+
+
+
+  #trip-map {
+            width: 100%;
+            min-height: 340px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        .trip-map-status {
+            margin-top: 10px;
+            color: #e2e8f0;
+            font-size: 0.92rem;
+        }
+
+        .trip-point-label {
+            background: rgba(15, 23, 42, 0.9);
+            color: #f8fafc;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            border-radius: 6px;
+            padding: 2px 7px;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: none;
+        }
+
+        .trip-point-label:before {
+            border-top-color: rgba(15, 23, 42, 0.9) !important;
+        }
+
+        .cotizacion-card {
+            background: #004D61;
+background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+            margin-top: 18px;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .cotizacion-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 0.95rem;
+            color: #f8fafc;
+            table-layout: fixed;
+            min-width: 100%;
+        }
+
+        .cotizacion-table th,
+        .cotizacion-table td {
+            padding: 14px 12px;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            text-align: left;
+            vertical-align: middle;
+            word-break: break-word;
+        }
+
+        .cotizacion-table thead th {
+            background: rgba(56, 189, 248, 0.18);
+            color: #eff6ff;
+            font-weight: 700;
+        }
+
+        .cotizacion-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .cotizacion-input {
+            width: 100%;
+            min-width: 0;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.9);
+            color: #f8fafc;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .cotizacion-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
+        }
+
+        .cotizacion-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .cotizacion-summary-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .cotizacion-summary-item span {
+            color: rgba(226, 232, 240, 0.8);
+            font-size: 0.85rem;
+        }
+
+        .cotizacion-summary-item strong {
+            color: #f8fafc;
+            font-size: 1.1rem;
+        }
+
+        .cotizacion-summary-item.total {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.35);
+        }
+
+        .cotizacion-route {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .cotizacion-route label {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: rgba(226, 232, 240, 0.9);
+            font-size: 0.92rem;
+        }
+
+        .cotizacion-route input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .cotizacion-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .cotizacion-actions button {
+            margin-top: 0;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            background: #3b82f6;
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.25s ease;
+        }
+
+        .cotizacion-actions button:hover {
+            background: #2563eb;
+        }
+
+        @media (max-width: 900px) {
+            .cotizacion-route,
+            .cotizacion-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    
