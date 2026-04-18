@@ -599,18 +599,131 @@ background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%)
             .chofer-header {
                 flex-direction: column;
                 text-align: center;
+                padding: 15px;
+            }
+
+            .user-info h1 {
+                font-size: 24px;
+            }
+
+            .user-details {
+                font-size: 14px;
+            }
+
+            .welcome-message {
+                font-size: 18px;
             }
 
             .btn-logout {
                 margin-top: 15px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .card-number {
+                font-size: 28px;
+            }
+
+            .card h3 {
+                font-size: 14px;
+            }
+
+            .section {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .viajes-table {
+                font-size: 14px;
+            }
+
+            .viajes-table th,
+            .viajes-table td {
+                padding: 8px;
+            }
+
+            .viaje-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
 
             .viaje-acciones {
                 flex-direction: column;
             }
 
+            .viaje-acciones button {
+                width: 100%;
+            }
+
             .form-inline {
                 flex-direction: column;
+            }
+
+            .form-inline .form-control {
+                min-width: auto;
+            }
+
+            .trip-update-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .trip-update-modal {
+                padding: 10px;
+            }
+
+            .trip-update-modal-dialog {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .trip-update-modal-actions {
+                flex-direction: column;
+            }
+
+            .trip-update-modal-actions button {
+                width: 100%;
+            }
+
+            .welcome-section {
+                padding: 20px;
+            }
+
+            .welcome-section h2 {
+                font-size: 20px;
+            }
+        }
+
+        /* Tablet (769px - 1024px) */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .chofer-dashboard-layout {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .chofer-dashboard-sidebar {
+                position: static;
+            }
+
+            .summary-cards {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .viaje-info {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            }
+
+            .trip-update-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             }
         }
 

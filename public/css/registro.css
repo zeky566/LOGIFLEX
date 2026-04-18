@@ -162,4 +162,70 @@ body{
     gap:60px;
 }
 
+/* =======================
+   Responsive Design
+======================= */
+
+/* Mobile (hasta 768px) */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    .register-form {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px 20px;
+    }
+
+    .register-form h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .label, .rol-lab {
+        font-size: 13px;
+    }
+
+    .register-form input[type="text"],
+    .register-form input[type="tel"],
+    .register-form input[type="password"],
+    .select-css {
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .btn-save, .btn-cancel {
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .img1 {
+        max-width: 100%;
+        width: 300px;
+    }
+}
+
+/* Tablet (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .container {
+        gap: 40px;
+    }
+
+    .register-form {
+        width: 350px;
+        padding: 35px;
+    }
+
+    .img1 {
+        max-width: 600px;
+    }
+}
+
 

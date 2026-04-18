@@ -1049,6 +1049,114 @@ background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(0, 0, 0, 1) 100%)
                 display: block;
             }
 
+            .admin-container {
+                padding: 8px;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .user-info h1 {
+                font-size: 24px;
+            }
+
+            .user-details {
+                font-size: 18px;
+            }
+
+            .btn-logout {
+                width: 100%;
+                text-align: center;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .admin-stats-strip {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .users-overview-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .vehicle-filters {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .vehicle-detail-panels {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .trip-filters {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .trip-assignment-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .trip-panels-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .trips-nav {
+                justify-content: center;
+            }
+
+            .excel-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .excel-import-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .users-role-tabs {
+                justify-content: center;
+            }
+
+            .users-table-wrap {
+                max-height: 150px;
+            }
+
+            .users-table {
+                font-size: 12px;
+            }
+
+            .users-table th,
+            .users-table td {
+                padding: 4px 6px;
+            }
+
+            .card h3 {
+                font-size: 24px;
+            }
+
+            .welcome-section {
+                padding: 10px;
+            }
+
+            .welcome-section h2 {
+                font-size: 20px;
+            }
+        }
+
             .admin-dashboard-toggle {
                 display: block;
             }

@@ -138,3 +138,62 @@ body{
     justify-content:center;
     gap:60px;
 }
+
+/* =======================
+   Responsive Design
+======================= */
+
+/* Mobile (hasta 768px) */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    .login-form {
+        width: 100%;
+        max-width: 300px;
+        padding: 30px 20px;
+    }
+
+    .login-form h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .btn-login, .btn-register {
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .img1 {
+        max-width: 100%;
+        width: 250px;
+    }
+}
+
+/* Tablet (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .container {
+        gap: 40px;
+    }
+
+    .login-form {
+        width: 280px;
+        padding: 35px;
+    }
+
+    .img1 {
+        max-width: 350px;
+    }
+}

@@ -787,6 +787,216 @@ background: radial-gradient(circle,rgba(0, 77, 97, 1) 0%, rgba(122, 122, 122, 1)
         inset 0 0 10px #00eaff;
 }
 
+/* =======================
+   Responsive Design
+======================= */
+
+/* Mobile (hasta 768px) */
+@media (max-width: 768px) {
+    .hed-1 {
+        flex-direction: column;
+        padding: 10px 20px;
+        gap: 10px;
+    }
+
+    .hed-1 h1 {
+        font-size: 32px;
+    }
+
+    .hed-1 strong {
+        font-size: 18px;
+        margin-left: 0;
+    }
+
+    .frase {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .a-login, .a-logout {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    #map {
+        width: 100%;
+        height: 250px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .card {
+        max-width: 100%;
+    }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .table-wrapper {
+        margin-bottom: 1rem;
+    }
+
+    table {
+        font-size: 0.8rem;
+        min-width: 600px;
+    }
+
+    th, td {
+        padding: 0.5rem;
+    }
+
+    .hero {
+        padding: 0 20px;
+        margin-top: 50px;
+        height: auto;
+        min-height: 400px;
+    }
+
+    .hero-content {
+        margin-left: 0;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .hero-content h1 {
+        font-size: 40px;
+    }
+
+    .hero-content p {
+        font-size: 18px;
+    }
+
+    .slide-indicator, .slider-controls {
+        bottom: 20px;
+    }
+
+    .parent3 {
+        grid-template-columns: 1fr;
+        padding: 20px 10px;
+        gap: 15px;
+    }
+
+    .div1, .div2, .div3 {
+        padding: 20px 15px;
+        min-height: 200px;
+    }
+
+    .div1 h4, .div2 h4, .div3 h4 {
+        font-size: 1.2rem;
+    }
+
+    .div1 p, .div2 p, .div3 p {
+        font-size: 1rem;
+    }
+
+    .info {
+        flex-direction: column;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .info-box {
+        max-width: 100%;
+        min-width: auto;
+    }
+
+    .cont1 {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .log1 {
+        width: 200px;
+    }
+
+    .cont1 p {
+        font-size: 16px;
+    }
+
+    .img2 {
+        max-width: 100%;
+    }
+
+    .select-css {
+        max-width: 100%;
+    }
+
+    .card-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    #costs-table th, #costs-table td {
+        padding: 8px 5px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Tablet (769px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .hed-1 {
+        padding: 15px 30px;
+    }
+
+    .hed-1 h1 {
+        font-size: 48px;
+    }
+
+    .hed-1 strong {
+        font-size: 24px;
+    }
+
+    #map {
+        width: 50%;
+        height: 300px;
+    }
+
+    .hero-content {
+        margin-left: 60px;
+        max-width: 500px;
+    }
+
+    .parent3 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .info {
+        padding: 15px;
+    }
+
+    .cont1 {
+        max-width: 700px;
+        gap: 20px;
+    }
+
+    .log1 {
+        width: 250px;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+/* Desktop grande (más de 1024px) - ya está optimizado */
+
 
 
 
