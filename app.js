@@ -5,6 +5,7 @@ const path = require('path');
 const XLSX = require('xlsx');
 const multer = require('multer');
 
+//mongodb+srv://meliodassuarezcaballero_db_user:VVCMnjS2I7apK34E@cluster0.trikrht.mongodb.net/?appName=Cluster0
 // capturar datos de formularios
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -33,6 +34,16 @@ app.use(session({
 
 // conexión base de datos
 const connection = require('./database/db');
+
+// Helper para consultas MySQL con Promesas
+function queryDb(sql, params = []) {
+    return new Promise((resolve, reject) => {
+        connection.query(sql, params, (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
+}
 // Multer en memoria: permite recibir archivos Excel sin guardarlos en disco.
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -44,15 +55,7 @@ function isAdmin(req) {
     return req.session.loggedin && req.session.rol === 'admin';
 }
 
-// Wrapper Promise para usar consultas MySQL con async/await.
-function queryDb(sql, values = []) {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, values, (error, results) => {
-            if (error) return reject(error);
-            resolve(results);
-        });
-    });
-}
+// Elimina función de consultas MySQL, ahora se usará MongoDB Atlas.
 
 // Devuelve alias de identidad para comparar nombre visible y usuario interno.
 async function getUserAliasesByRole(role, sessionName, sessionUser) {
