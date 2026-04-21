@@ -1,16 +1,22 @@
 // conexion a la base de datos
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
-const connectionConfig = process.env.DATABASE_URL
-    ? process.env.DATABASE_URL
-    : {
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE
-    };
+const connection = mysql.createConnection({
+    host: 'bzinscjqdg3tkhiskt2f-mysql.services.clever-cloud.com',
+    user: 'u6ogy9115t1olmyq',
+    password: 'qYk8E8KviWHM7Ok0M8y',
+    database: 'bzinscjqdg3tkhiskt2f',
+    port: 20107
+});
 
-const connection = mysql.createConnection(connectionConfig);
+connection.connect((error) => {
+    if (error) {
+        console.log('El error de conexion es: ', error);
+        return;
+    }
+    console.log('Conectado a la base de datos MySQL');
+});
+module.exports = connection;
 
 connection.connect((error) => {
     if (error) {

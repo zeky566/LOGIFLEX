@@ -5,7 +5,7 @@ const path = require('path');
 const XLSX = require('xlsx');
 const multer = require('multer');
 
-//mongodb+srv://meliodassuarezcaballero_db_user:VVCMnjS2I7apK34E@cluster0.trikrht.mongodb.net/?appName=Cluster0
+
 // capturar datos de formularios
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
