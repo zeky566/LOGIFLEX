@@ -1,12 +1,13 @@
-// conexion a la base de datos
+// conexion a la base de datos usando variables de entorno
 const mysql = require('mysql2');
+require('dotenv').config({ path: './env/.env' });
 
 const connection = mysql.createConnection({
-    host: 'bzinscjqdg3tkhiskt2f-mysql.services.clever-cloud.com',
-    user: 'u6ogy9115t1olmyq',
-    password: 'qYk8E8KviWHM7Ok0M8y',
-    database: 'bzinscjqdg3tkhiskt2f',
-    port: 20107
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306
 });
 
 connection.connect((error) => {
@@ -16,13 +17,5 @@ connection.connect((error) => {
     }
     console.log('Conectado a la base de datos MySQL');
 });
+
 module.exports = connection;
-
-connection.connect((error) => {
-    if (error) {
-        console.log('El error de conexion es: ', error);
-        return;
-    }
-    console.log('Conectado a la base de datos MySQL');
-});
-module.exports = connection; // exportamos la conexion para usarla en otros archivos
