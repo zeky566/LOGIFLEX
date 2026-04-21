@@ -2147,17 +2147,25 @@ app.post('/register', async (req, res) => {
 // ================= LOGIN =================
 
 app.post('/auth', async (req, res) => {
-
     const user = req.body.user;
     const pass = req.body.pass;
 
     if (user && pass) {
-
         connection.query('SELECT * FROM users WHERE user = ?', [user], async (error, results) => {
-
+            if (error) {
+                console.error('Error en la consulta:', error);
+                return res.status(500).render('login', {
+                    alert: true,
+                    alertTitle: "Error",
+                    alertMessage: "Error interno del servidor",
+                    alertIcon: 'error',
+                    showConfirmButton: true,
+                    timer: false,
+                    ruta: 'login'
+                });
+            }
             if (results.length == 0 || !(await bcrypt.compare(pass, results[0].pass))) {
-
-                res.render('login', {
+                return res.render('login', {
                     alert: true,
                     alertTitle: "Error",
                     alertMessage: "Usuario y/o contraseña incorrectos",
@@ -2166,17 +2174,13 @@ app.post('/auth', async (req, res) => {
                     timer: false,
                     ruta: 'login'
                 });
-
             } else {
-
                 req.session.loggedin = true;
                 req.session.user = results[0].user;
                 req.session.name = results[0].name;
                 req.session.rol = results[0].rol;
-
                 let destino = "/" + results[0].rol;
-
-                res.render('login', {
+                return res.render('login', {
                     alert: true,
                     alertTitle: "Bienvenido",
                     alertMessage: "Has ingresado correctamente",
@@ -2185,14 +2189,10 @@ app.post('/auth', async (req, res) => {
                     timer: 1500,
                     ruta: destino
                 });
-
             }
-
         });
-
     } else {
-
-        res.render('login', {
+        return res.render('login', {
             alert: true,
             alertTitle: "Advertencia",
             alertMessage: "Por favor ingrese un usuario y/o contraseña",
@@ -2201,9 +2201,7 @@ app.post('/auth', async (req, res) => {
             timer: false,
             ruta: 'login'
         });
-
     }
-
 });
 
 
